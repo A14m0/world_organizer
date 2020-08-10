@@ -1,0 +1,522 @@
+{
+    "Questions": [
+        {
+            "QuestionString": "What is their name?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic"]
+        },
+        {
+            "QuestionString": "What is their age?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic"]
+        },
+        {
+            "QuestionString": "Where were they born?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Location"]
+        },
+        {
+            "QuestionString": "Where are they now?",
+            "Priority": 1,
+            "Tags": ["Basic", "Location"]
+        },
+        {
+            "QuestionString": "How educated are they?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Knowledge", "Smarts"]
+        },
+        {
+            "QuestionString": "How much money do they make?",
+            "Priority": 1,
+            "Tags": ["Basic", "Financial"]
+        },
+        {
+            "QuestionString": "What color are their eyes?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Physical"]
+        },
+        {
+            "QuestionString": "What kind of hairstyle do they have?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Physical"]
+        },
+        {
+            "QuestionString": "What kind of build are they?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Physical"]
+        },
+        {
+            "QuestionString": "Any distinguishing features (tattoos, scars, etc.)?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Physical"]
+        },
+        {
+            "QuestionString": "What is their preferred outfit?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Physical", "Clothing"]
+        },
+        {
+            "QuestionString": "Do they wear glasses?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Physical", "Clothing"]
+        },
+        {
+            "QuestionString": "What accessories are ALWAYS with them (cane, pipe, etc.)?",
+            "Priority": 2,
+            "Tags": ["Personal", "Objects"]
+        },
+        {
+            "QuestionString": "What is their usual level of grooming?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Physical"]
+        },
+        {
+            "QuestionString": "Do they have any \"tics\" or mannerisms?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Characteristic", "Personality"]
+        },
+        {
+            "QuestionString": "Describe their handwriting",
+            "Priority": 3,
+            "Tags": ["Personal", "Basic", "Characteristic", "Language"]
+        },
+        {
+            "QuestionString": "How do they walk (confident, stroll, etc.)?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Characteristic", "Physical"]
+        },
+        {
+            "QuestionString": "How do they talk (fast, measured, drawl, etc.)?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Language"]
+        },
+        {
+            "QuestionString": "What style of language do they use (educated, slang, etc.)?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Language", "Characteristic"]
+        },
+        {
+            "QuestionString": "Do they have an accent?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Language", "Characteristic"]
+        },
+        {
+            "QuestionString": "What kind of posture do they have (stiff, slouch, etc.)?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic"]
+        },
+        {
+            "QuestionString": "When do they gesture (only when agitated, compulsive, etc.)?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "How much eye contact do they make?",
+            "Priority": 2,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What's their preferred curse word?",
+            "Priority": 3,
+            "Tags": ["Personal", "Language", "Knowledge"]
+        },
+        {
+            "QuestionString": "Do they have a catchphrase?",
+            "Priority": 3,
+            "Tags": ["Personal", "Language", "Personality"]
+        },
+        {
+            "QuestionString": "Do they have any speech impediments?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Language", "Characteristic"]
+        },
+        {
+            "QuestionString": "Any distinguishing speech \"tics\"?",
+            "Priority": 2,
+            "Tags": ["Personal", "Language", "Characteristic"]
+        },
+        {
+            "QuestionString": "What's their laugh like?",
+            "Priority": 3,
+            "Tags": ["Personal", "Language", "Characteristic", "Personality"]
+        },
+        {
+            "QuestionString": "What do they tend to find funny?",
+            "Priority": 2,
+            "Tags": ["Personal", "Characteristic", "Personality"]
+        },
+        {
+            "QuestionString": "Describe their smile",
+            "Priority": 2,
+            "Tags": ["Personal", "Characteristic", "Personality"]
+        },
+        {
+            "QuestionString": "How emotive are they (how easily can others read them)?",
+            "Priority": 2,
+            "Tags": ["Personal", "Personality", "Characteristic", "Emotion"]
+        },
+        {
+            "QuestionString": "Do they have a resting _______ face (angel, bitch, neutral, etc.)?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic", "Physical"]
+        },
+        {
+            "QuestionString": "What was the name of their hometown?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Location", "History"]
+        },
+        {
+            "QuestionString": "What type of childhood did they have (sheltered, neglected, etc.)?",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "Describe their education",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Knowledge", "Smarts"]
+        },
+        {
+            "QuestionString": "Were they involved in school organizations/clubs?",
+            "Priority": 2,
+            "Tags": ["Personal", "Knowledge", "Smarts"]
+        },
+        {
+            "QuestionString": "What would be on their resume?",
+            "Priority": 2,
+            "Tags": ["Personal", "Knowledge", "Job"]
+        },
+        {
+            "QuestionString": "What was their childhood dream job (and if applicable, why)?",
+            "Priority": 2,
+            "Tags": ["Personal", "Job", "History"]
+        },
+        {
+            "QuestionString": "Who were their role models? Describe",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "What's their greatest regret?",
+            "Priority": 1,
+            "Tags": ["Personal", "History", "Emotion"]
+        },
+        {
+            "QuestionString": "What were their hobbies growing up?",
+            "Priority": 2,
+            "Tags": ["Personal", "History", "Personality"]
+        },
+        {
+            "QuestionString": "What was their favorite childhood place?",
+            "Priority": 2,
+            "Tags": ["Personal", "History", "Location"]
+        },
+        {
+            "QuestionString": "What's their earliest memory?",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "What's their saddest memory?",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "What's their happiest memory?",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "What's their clearest memory?",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "What are their skeletons in the closet?",
+            "Priority": 2,
+            "Tags": ["Personal", "History", "Emotion"]
+        },
+        {
+            "QuestionString": "If they could change one thing in the past, what would it be and why?",
+            "Priority": 2,
+            "Tags": ["Personal", "History", "Personality", "Knowledge"]
+        },
+        {
+            "QuestionString": "Describe the major turning points or \"life beats\" in their childhood",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "History", "Personality"]
+        },
+        {
+            "QuestionString": "What are 3 adjectives to describe their child self?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "History"]
+        },
+        {
+            "QuestionString": "What advice would they give their younger self?",
+            "Priority": 2,
+            "Tags": ["Personal", "History", "Personality"]
+        },
+        {
+            "QuestionString": "List their criminal record",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "List their family members (include age, occupation, relatonship with character)",
+            "Priority": 1,
+            "Tags": ["Basic", "Others", "Family"]
+        },
+        {
+            "QuestionString": "What is their family's economic status?",
+            "Priority": 1,
+            "Tags": ["Basic", "Financial", "Others", "Family"]
+        },
+        {
+            "QuestionString": "How often do they see their family in a year?",
+            "Priority": 2,
+            "Tags": ["Basic", "Others", "Family", "Social"]
+        },
+        {
+            "QuestionString": "Describe their closest friends",
+            "Priority": 1,
+            "Tags": ["Basic", "Others", "Social"]
+        },
+        {
+            "QuestionString": "Describe other, less significant friends",
+            "Priority": 2,
+            "Tags": ["Basic", "Others", "Social"]
+        },
+        {
+            "QuestionString": "Do they have any enemies? Describe",
+            "Priority": 1,
+            "Tags": ["Basic", "Enemies", "Social"]
+        },
+        {
+            "QuestionString": "How are they perceived by others (strangers in the streets, acquaintances at work, authority figures, children, opposite sex, extended family)?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Others", "Social"]
+        },
+        {
+            "QuestionString": "Do they engage on social media? If so, which?",
+            "Priority": 2,
+            "Tags": ["Personal", "Social"]
+        },
+        {
+            "QuestionString": "What role in the group dynamic do they exist in?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Others", "Social"]
+        },
+        {
+            "QuestionString": "Who do they depend on for parental advice, mentoring, wingmanning, emotional, or moral support?",
+            "Priority": 2,
+            "Tags": ["Personal", "Others", "Family"]
+        },
+        {
+            "QuestionString": "What do they want from a relationship?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Relationships", "Love"]
+        },
+        {
+            "QuestionString": "Who would be their ideal partner?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Relationships", "Love"]
+        },
+        {
+            "QuestionString": "Who is their significant other? Describe them",
+            "Priority": 1,
+            "Tags": ["Basic", "Relationships", "Love"]
+        },
+        {
+            "QuestionString": "How many people would attend their funeral?",
+            "Priority": 1,
+            "Tags": ["Personal", "Personality", "Social", "Relationships", "Others"]
+        },
+        {
+            "QuestionString": "What do they do on rainy days?",
+            "Priority": 2,
+            "Tags": ["Personal"]
+        },
+        {
+            "QuestionString": "Are they street-smart or book-smart?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Knowledge", "Smarts"]
+        },
+        {
+            "QuestionString": "Are they an optimist or a pessimist?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Personality"]
+        },
+        {
+            "QuestionString": "Are they an introvert or an extrovert?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Personality"]
+        },
+        {
+            "QuestionString": "What is their favorite sound?",
+            "Priority": 3,
+            "Tags": ["Personal"]
+        },
+        {
+            "QuestionString": "What is their favorite place?",
+            "Priority": 2,
+            "Tags": ["Personal", "Location", "Personality"]
+        },
+        {
+            "QuestionString": "What secrets do they keep, and why are they affraid of people finding out?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic", "Secrets", "Others"]
+        },
+        {
+            "QuestionString": "What do they want most?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Goal"]
+        },
+        {
+            "QuestionString": "What is their biggest flaw?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic"]
+        },
+        {
+            "QuestionString": "What is their biggest strength?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic"]
+        },
+        {
+            "QuestionString": "What is their biggest fear?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Characteristic"]
+        },
+        {
+            "QuestionString": "What is their biggest accomplishment?",
+            "Priority": 2,
+            "Tags": ["Personal", "History"]
+        },
+        {
+            "QuestionString": "What is their idea of perfect happiness?",
+            "Priority": 2,
+            "Tags": ["Personal", "Others", "Personality", "Relationships"]
+        },
+        {
+            "QuestionString": "What is their favorite quote?",
+            "Priority": 3,
+            "Tags": ["Personal", "Basic"]
+        },
+        {
+            "QuestionString": "Do they want to be remembered, and, if so, for what?",
+            "Priority": 2,
+            "Tags": ["Personal", "Basic", "Personality", "History"]
+        },
+        {
+            "QuestionString": "How do they approach power?",
+            "Priority": 2,
+            "Tags": ["Personal", "Others", "Social", "Society"]
+        },
+        {
+            "QuestionString": "How do they approach ambition?",
+            "Priority": 2,
+            "Tags": ["Personal", "Others", "Social", "Society"]
+        },
+        {
+            "QuestionString": "How do they approach love?",
+            "Priority": 2,
+            "Tags": ["Personal", "Others", "Relationships", "Love"]
+        },
+        {
+            "QuestionString": "How do they approach change?",
+            "Priority": 2,
+            "Tags": ["Personal", "Others"]
+        },
+        {
+            "QuestionString": "What is the one object they would rescue from their buring home?",
+            "Priority": 2,
+            "Tags": ["Personal", "Object", "Characteristic"]
+        },
+        {
+            "QuestionString": "What/who bores them?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What makes them angry?",
+            "Priority": 2,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What do they look for in a person?",
+            "Priority": 1,
+            "Tags": ["Personal", "Others", "Relationships", "Emotion"]
+        },
+        {
+            "QuestionString": "How strong is their moral compass?",
+            "Priority": 1,
+            "Tags": ["Personal", "Morality"]
+        },
+        {
+            "QuestionString": "When are they willing to compromise their morals?",
+            "Priority": 1,
+            "Tags": ["Personal", "Morality"]
+        },
+        {
+            "QuestionString": "List the last 10 books they read",
+            "Priority": 3,
+            "Tags": ["Personal", "Object", "History", "Characteristic"]
+        },
+        {
+            "QuestionString": "Which fictional world would they most wish to visit?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "If they didn't have to sleep, what would they do in their spare time?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What are their pet peeves?",
+            "Priority": 2,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "If they won the lottery, what would they do?",
+            "Priority": 3,
+            "Tags": ["Personal", "Financial", "Goal"]
+        },
+        {
+            "QuestionString": "Describe their bucket list at ages 15, 20, 30, 40",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "List their 10 most favorite songs",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What is the best compliment that someone ever paid them?",
+            "Priority": 3,
+            "Tags": ["Personal", "Others"]
+        },
+        {
+            "QuestionString": "In an elevator, do they push the floor button more than once?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What would they have written on their tombstone?",
+            "Priority": 3,
+            "Tags": ["Personal", "Characteristic"]
+        },
+        {
+            "QuestionString": "What is their story goal?",
+            "Priority": 1,
+            "Tags": ["Personal", "Basic", "Goal"]
+        },
+        {
+            "QuestionString": "What is the story motivation?",
+            "Priority": 1,
+            "Tags": ["Basic", "Goal"]
+        }
+
+    ]
+
+
+}
