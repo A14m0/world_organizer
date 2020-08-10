@@ -103,3 +103,11 @@ class Story:
     def load(self, path):
         return None
         
+    def get_title(self):
+        return "Test Story"
+    
+    def get_characters(self):
+        return self.characters
+
+    def get_events(self):
+        return self.events
