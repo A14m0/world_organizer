@@ -31,8 +31,8 @@ class MainWin(QtWidgets.QMainWindow):
 
     def UiComponents(self):
         # gets variables for defining windows
-        x = self.x()
-        y = self.y()
+        x = self.width()
+        y = self.height()
 
         # initialize the File menu
         self.menu_file = QtWidgets.QMenu(self)
@@ -47,6 +47,8 @@ class MainWin(QtWidgets.QMainWindow):
         self.menu_tools.setTitle("Tools")
         self.menu_tools.addAction("View Timeline", self.Junk)
         self.menu_tools.addAction("View Relations", self.Junk)
+        self.menu_tools.addAction("View Story Notes", self.Junk)
+        self.menu_tools.addAction("Edit Story Notes", self.Junk)
 
         #initialize the toolbar
         self.toolbar = QtWidgets.QMenuBar(self)
@@ -84,25 +86,50 @@ class MainWin(QtWidgets.QMainWindow):
         self.event_num_label.setText("Number of Events: " + str(len(self.story.get_events())))
         self.event_num_label.setGeometry(60, y-30, 150, 25)
 
+        # initialize tree view of story elements
+        self.char_tree = QtWidgets.QTreeWidget(self)
+        self.char_tree.setHeaderLabel("Characters")
+        self.event_tree = QtWidgets.QTreeWidget(self)
+        self.event_tree.setHeaderLabel("Events")
+        self.location_tree = QtWidgets.QTreeWidget(self)
+        self.location_tree.setHeaderLabel("Locations")
+        self.world_prop_tree = QtWidgets.QTreeWidget(self)
+        self.world_prop_tree.setHeaderLabel("World Properties")
+
+        self.char_tree.setGeometry(230, 30, 300, 180)
+        self.event_tree.setGeometry(550, 30, 300, 180)
+        self.location_tree.setGeometry(230, 230, 300, 180)
+        self.world_prop_tree.setGeometry(550, 230, 300, 180)
+
+
+    # updates position of labels
     def update_stuff(self):
         geom = self.geometry()
 
+        x = geom.width()
         y = geom.height()
 
-        print("Y: %d" % y)
+        # define bounds beyond which we wont try to readjust stuff
+        if y < 450:
+            y = 450
 
-        if y < 195:
-            y = 195
+        if x < 550:
+            x = 550
 
         self.story_str_label.setGeometry(60, y-70, 150, 25)
         self.char_num_label.setGeometry(60, y-50, 150, 25)
         self.event_num_label.setGeometry(60, y-30, 150, 25)
 
+        self.char_tree.setGeometry(230, 30, int((1/2) * (x-300)), int((1/2) * (y-180)) )
+        self.event_tree.setGeometry(int((1/2) * (x-300)) + 250, 30, int((1/2) * (x-300)), int((1/2) * (y-180)) )
+        self.location_tree.setGeometry(230, int((1/2) * (y-180)) + 50, int((1/2) * (x-300)), int((1/2) * (y-180)))
+        self.world_prop_tree.setGeometry(int((1/2) * (x-300)) + 250, int((1/2) * (y-180)) + 50, int((1/2) * (x-300)), int((1/2) * (y-180)))
 
+    # junk file
     def Junk(self):
         print("Button was pressed")
-        print("Window dimensions: %d x %d" % (self.x(), self.y()))
-
+        
+    # triggers resize events 
     def resizeEvent(self, event):
         self.resized.emit()
         return super(MainWin, self).resizeEvent(event)

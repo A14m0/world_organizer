@@ -67,7 +67,7 @@ class Event:
         self.Description = description
 
 # class that defines a world location
-class World:
+class Locations:
     def __init__(self, name, description, notes):
         self.name = name
         self.description = description
@@ -82,7 +82,7 @@ class Story:
     def __init__(self):
         self.characters = []
         self.events = []
-        self.worlds = []
+        self.locations = []
         self.notes = []
 
     def add_character(self, character):
@@ -91,8 +91,8 @@ class Story:
     def add_event(self, event):
         self.events.append(event)
 
-    def add_world(self, world):
-        self.worlds.append(world)
+    def add_location(self, loc):
+        self.locations.append(loc)
 
     def add_note(self, note):
         self.notes.append(note)
@@ -111,3 +111,6 @@ class Story:
 
     def get_events(self):
         return self.events
+
+    def get_locations(self):
+        return self.locations
