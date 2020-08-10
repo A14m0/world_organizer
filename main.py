@@ -2,6 +2,8 @@
 import json
 from PyQt5 import QtWidgets, QtCore
 import sys
+
+import ui_classes
 from elements import *
 
 low_complexity = 1
@@ -58,7 +60,9 @@ class MainWin(QtWidgets.QMainWindow):
         # Initialize the starting button layout
         self.add_char_button = QtWidgets.QPushButton(self)
         self.add_event_button = QtWidgets.QPushButton(self)
+        self.add_location_button = QtWidgets.QPushButton(self)
         self.add_world_elem_button = QtWidgets.QPushButton(self)
+
 
         self.add_char_button.setGeometry(60, 40, 150, 25)
         self.add_char_button.setText("Add Character")
@@ -66,11 +70,15 @@ class MainWin(QtWidgets.QMainWindow):
         self.add_event_button.setGeometry(60, 70, 150, 25)
         self.add_event_button.setText("Add Event")
 
-        self.add_world_elem_button.setGeometry(60, 100, 150, 25)
-        self.add_world_elem_button.setText("Add World Element")
+        self.add_location_button.setGeometry(60, 100, 150, 25)
+        self.add_location_button.setText("Add Location")
+        
+        self.add_world_elem_button.setGeometry(60, 130, 150, 25)
+        self.add_world_elem_button.setText("Add World Attribute")
 
-        self.add_char_button.clicked.connect(self.Junk)
+        self.add_char_button.clicked.connect(self.add_character)
         self.add_event_button.clicked.connect(self.Junk)
+        self.add_location_button.clicked.connect(self.Junk)
         self.add_world_elem_button.clicked.connect(self.Junk)
 
         # initialize Information Labels
@@ -116,14 +124,50 @@ class MainWin(QtWidgets.QMainWindow):
         if x < 550:
             x = 550
 
+        # resize text labels
         self.story_str_label.setGeometry(60, y-70, 150, 25)
         self.char_num_label.setGeometry(60, y-50, 150, 25)
         self.event_num_label.setGeometry(60, y-30, 150, 25)
 
+        # resize views
         self.char_tree.setGeometry(230, 30, int((1/2) * (x-300)), int((1/2) * (y-180)) )
         self.event_tree.setGeometry(int((1/2) * (x-300)) + 250, 30, int((1/2) * (x-300)), int((1/2) * (y-180)) )
         self.location_tree.setGeometry(230, int((1/2) * (y-180)) + 50, int((1/2) * (x-300)), int((1/2) * (y-180)))
         self.world_prop_tree.setGeometry(int((1/2) * (x-300)) + 250, int((1/2) * (y-180)) + 50, int((1/2) * (x-300)), int((1/2) * (y-180)))
+
+    # reload all of the tree views
+    def reload_trees(self):
+        # clear the tree views
+        self.char_tree.clear()
+        self.event_tree.clear()
+        self.location_tree.clear()
+        self.world_prop_tree.clear()
+
+        # re-add all of the entries
+        for character in self.story.get_characters():
+            entry = QtWidgets.QTreeWidgetItem(self)
+            entry.setText(character.get_text())
+            entry.setData(character)
+            self.char_tree.addTopLevelItem(entry)
+
+        for event in self.story.get_events():
+            entry = QtWidgets.QTreeWidgetItem(self)
+            entry.setText(event.get_text())
+            entry.setData(event)
+            self.char_tree.addTopLevelItem(entry)
+
+        for location in self.story.get_locations():
+            entry = QtWidgets.QTreeWidgetItem(self)
+            entry.setText(location.get_text())
+            entry.setData(location)
+            self.char_tree.addTopLevelItem(entry)
+
+        for attr in self.story.get_world_attr():
+            entry = QtWidgets.QTreeWidgetItem(self)
+            entry.setText(attr.get_text())
+            entry.setData(attr)
+            self.char_tree.addTopLevelItem(entry)
+        
 
     # junk file
     def Junk(self):
@@ -134,6 +178,19 @@ class MainWin(QtWidgets.QMainWindow):
         self.resized.emit()
         return super(MainWin, self).resizeEvent(event)
   
+    def add_character(self):
+        win = ui_classes.AddChar_Diag(self)
+        win.exec()
+        return
+
+    def add_event(self):
+        return
+
+    def add_location(self):
+        return
+
+    def add_world_attr(self):
+        return
 
 
 
@@ -142,8 +199,10 @@ class MainWin(QtWidgets.QMainWindow):
 
 
 
-def full_char():
-    character = Character()
+def full_char(name):
+
+
+    character = Character(name)
     for question in questions["Questions"]:
         element = Attribute()
         element.set_e1(question["QuestionString"])
@@ -156,7 +215,7 @@ def full_char():
     print(character)
     
 
-def med_char():
+def med_char(name):
     ret_str = ""
     for question in questions["Questions"]:
         if question["Priority"] != 3:
@@ -168,7 +227,7 @@ def med_char():
     print(ret_str)
     return
 
-def min_char():
+def min_char(name):
     ret_str = ""
     for question in questions["Questions"]:
         if question["Priority"] == 1:
@@ -186,7 +245,7 @@ def main(ye_olden_flag):
     if not ye_olden_flag:
         App = QtWidgets.QApplication(sys.argv) 
 
-        story = Story()
+        story = Story(questions)
     
         # create the instance of our Window 
         window = MainWin(story) 
@@ -195,7 +254,7 @@ def main(ye_olden_flag):
         sys.exit(App.exec())
     else:
 
-
+        name = "Test Name"
         levl = input("How in depth would you like to go? (1 (low), 2 (moderate), 3 (high)) > ")
         try:
             levl = int(levl)
@@ -203,11 +262,11 @@ def main(ye_olden_flag):
             print("Failed to determine complexity. Please enter a valid complexity level")
             return
         if levl == low_complexity:
-            min_char()
+            min_char(name = "Test Name")
         elif levl == med_complexity:
-            med_char()
+            med_char(name = "Test Name")
         else:
-            full_char()
+            full_char(name = "Test Name")
 
     
 

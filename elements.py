@@ -1,34 +1,3 @@
-# class for defining characters and their attributes
-class Character:
-    def __init__(self):
-        self.attributes = []
-    
-    def add_attribute(self, attribute):
-        self.attributes.append(attribute)
-
-    def __str__(self):
-        ret_str = ""
-        for element in self.attributes:
-            ret_str = ret_str + element
-        
-        return ret_str
-
-# class that defines a question element or answer to a question
-class Attribute:
-    def __init__(self):
-        self.ele1 = ""
-        self.ele2 = ""
-
-    def set_e1(self, e1):
-        self.ele1 = e1
-
-    def set_e2(self, e2):
-        self.ele2 = e2
-
-    def __str__(self):
-        return "%s: %s" % (self.ele1, self.ele2)
-
-
 # class for printing fancy text
 class bcolors:
     HEADER = '\033[95m'
@@ -57,17 +26,62 @@ class bcolors:
     BLACK_RED = '\033[0;30m\033[1;41m'
 
 
+# base class that defines required generic functions
+class Base:
+    def get_text(self):
+        pass
+
+
+# class for defining characters and their attributes
+class Character(Base):
+    def __init__(self, name):
+        self.name = name
+        self.attributes = []
+    
+    def add_attribute(self, attribute):
+        self.attributes.append(attribute)
+
+    def __str__(self):
+        ret_str = ""
+        for element in self.attributes:
+            ret_str = ret_str + element + "\n"
+        
+        return ret_str
+
+    def get_text(self):
+        return self.name
+
+# class that defines a question element or answer to a question
+class Attribute(Base):
+    def __init__(self):
+        self.ele1 = ""
+        self.ele2 = ""
+
+    def set_e1(self, e1):
+        self.ele1 = e1
+
+    def set_e2(self, e2):
+        self.ele2 = e2
+
+    def __str__(self):
+        return "%s: %s" % (self.ele1, self.ele2)
+
 
 # class that defines a particular world event
-class Event:
-    def __init__(self, date, time, location, description):
+class Event(Base):
+    def __init__(self, short, date, time, location, description):
+        self.short = short
         self.Date = date
         self.Time = time
         self.Location = location
         self.Description = description
 
+    def get_text(self):
+        return self.short
+
+
 # class that defines a world location
-class Locations:
+class Locations(Base):
     def __init__(self, name, description, notes):
         self.name = name
         self.description = description
@@ -77,13 +91,19 @@ class Locations:
         return "Name: %s\nDescription: %s\nNotes: %s\n" % \
                         (self.name, self.description, self.notes)
 
+    def get_text(self):
+        return self.name
+
 # class that holds specific information about a story
-class Story:
-    def __init__(self):
+class Story(Base):
+    def __init__(self, questions):
         self.characters = []
         self.events = []
         self.locations = []
+        self.world_attributes = []
         self.notes = []
+
+        self.questions = questions
 
     def add_character(self, character):
         self.characters.append(character)
@@ -93,6 +113,9 @@ class Story:
 
     def add_location(self, loc):
         self.locations.append(loc)
+
+    def add_world_attr(self, attr):
+        self.world_attributes.append(attr)
 
     def add_note(self, note):
         self.notes.append(note)
@@ -114,3 +137,6 @@ class Story:
 
     def get_locations(self):
         return self.locations
+
+    def get_world_attr(self):
+        return self.world_attributes
