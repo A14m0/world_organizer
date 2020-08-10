@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import json
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import sys
 from elements import *
 
@@ -18,6 +18,7 @@ questions = json.loads(dat)
 
 # the main window of the application
 class MainWin(QtWidgets.QMainWindow):
+    resized = QtCore.pyqtSignal()
     def __init__(self, story):
         super().__init__()
         self.story = story
@@ -25,9 +26,14 @@ class MainWin(QtWidgets.QMainWindow):
         self.setGeometry(100,100,800,550)
         self.UiComponents()
         self.show()
+        self.resized.connect(self.update_stuff)
         
 
     def UiComponents(self):
+        # gets variables for defining windows
+        x = self.x()
+        y = self.y()
+
         # initialize the File menu
         self.menu_file = QtWidgets.QMenu(self)
         self.menu_file.setTitle("File")
@@ -68,18 +74,38 @@ class MainWin(QtWidgets.QMainWindow):
         # initialize Information Labels
         self.story_str_label = QtWidgets.QLabel(self)
         self.story_str_label.setText("Story Name: " + self.story.get_title())
-        self.story_str_label.setGeometry(60, 460, 150, 25)
+        self.story_str_label.setGeometry(60, y-70, 150, 25)
 
         self.char_num_label = QtWidgets.QLabel(self)
         self.char_num_label.setText("Number of Characters: " + str(len(self.story.get_characters())))
-        self.char_num_label.setGeometry(60, 480, 150, 25)
+        self.char_num_label.setGeometry(60, y-50, 150, 25)
 
         self.event_num_label = QtWidgets.QLabel(self)
         self.event_num_label.setText("Number of Events: " + str(len(self.story.get_events())))
-        self.event_num_label.setGeometry(60, 500, 150, 25)
+        self.event_num_label.setGeometry(60, y-30, 150, 25)
+
+    def update_stuff(self):
+        geom = self.geometry()
+
+        y = geom.height()
+
+        print("Y: %d" % y)
+
+        if y < 195:
+            y = 195
+
+        self.story_str_label.setGeometry(60, y-70, 150, 25)
+        self.char_num_label.setGeometry(60, y-50, 150, 25)
+        self.event_num_label.setGeometry(60, y-30, 150, 25)
+
 
     def Junk(self):
         print("Button was pressed")
+        print("Window dimensions: %d x %d" % (self.x(), self.y()))
+
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(MainWin, self).resizeEvent(event)
   
 
 
