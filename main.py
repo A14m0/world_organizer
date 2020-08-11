@@ -147,27 +147,27 @@ class MainWin(QtWidgets.QMainWindow):
 
         # re-add all of the entries
         for character in self.story.get_characters():
-            entry = QtWidgets.QTreeWidgetItem(self)
-            entry.setText(character.get_text())
-            entry.setData(character)
+            entry = QtWidgets.QTreeWidgetItem(character.get_text())
+            entry.setText(0, character.get_text())
+            entry.setData(0, QtCore.Qt.EditRole, character)
             self.char_tree.addTopLevelItem(entry)
 
         for event in self.story.get_events():
-            entry = QtWidgets.QTreeWidgetItem(self)
-            entry.setText(event.get_text())
-            entry.setData(event)
+            entry = QtWidgets.QTreeWidgetItem(event.get_text())
+            entry.setText(0, event.get_text())
+            entry.setData(0, QtCore.Qt.EditRole, event)
             self.char_tree.addTopLevelItem(entry)
 
         for location in self.story.get_locations():
-            entry = QtWidgets.QTreeWidgetItem(self)
-            entry.setText(location.get_text())
-            entry.setData(location)
+            entry = QtWidgets.QTreeWidgetItem(location.get_text())
+            entry.setText(0, location.get_text())
+            entry.setData(0, QtCore.Qt.EditRole, location)
             self.char_tree.addTopLevelItem(entry)
 
         for attr in self.story.get_world_attr():
-            entry = QtWidgets.QTreeWidgetItem(self)
-            entry.setText(attr.get_text())
-            entry.setData(attr)
+            entry = QtWidgets.QTreeWidgetItem(attr.get_text())
+            entry.setText(0, attr.get_text())
+            entry.setData(0, QtCore.Qt.EditRole, attr)
             self.char_tree.addTopLevelItem(entry)
         
 
@@ -183,6 +183,7 @@ class MainWin(QtWidgets.QMainWindow):
     def add_character(self):
         win = ui_classes.ComplexityLvl_Diag(self)
         win.exec()
+        self.reload_trees()
         return
 
     def add_event(self):

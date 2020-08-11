@@ -38,7 +38,7 @@ class AddChar_Diag(QtWidgets.QDialog):
 
         # connect buttons
         self.save.clicked.connect(self.save_char)
-        self.cancel.clicked.connect(self.cancel_char)
+        self.cancel.clicked.connect(self.close)
         self.image_button.clicked.connect(self.load_img)
 
         self.image.setPixmap(self.image_path)
@@ -103,11 +103,22 @@ class AddChar_Diag(QtWidgets.QDialog):
 
 
     def save_char(self):
-        print("Window dimensions: %d x %d" % (self.width(), self.height()))
-        return
+        indx = 0
+        self.character = None
+        for val in self.edit_areas:
+            attr = Attribute()
 
-    def cancel_char(self):
-        return
+            if indx == 0:
+                self.character = Character(val.toPlainText())
+            else:
+                attr.set_e1(self.story.questions["Questions"][indx]["QuestionString"])
+                attr.set_e2(val.toPlainText())
+                self.character.add_attribute(attr)
+
+            indx = indx + 1
+
+        self.story.add_character(self.character)
+        self.close()
 
     def load_img(self):
         return
