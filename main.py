@@ -110,6 +110,8 @@ class MainWin(QtWidgets.QMainWindow):
         self.world_prop_tree.setGeometry(550, 230, 300, 180)
 
 
+        self.update_stuff()
+
     # updates position of labels
     def update_stuff(self):
         geom = self.geometry()
