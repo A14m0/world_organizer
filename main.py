@@ -181,7 +181,7 @@ class MainWin(QtWidgets.QMainWindow):
         return super(MainWin, self).resizeEvent(event)
   
     def add_character(self):
-        win = ui_classes.AddChar_Diag(self)
+        win = ui_classes.ComplexityLvl_Diag(self)
         win.exec()
         return
 

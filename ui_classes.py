@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from elements import *
 
 
@@ -8,74 +8,166 @@ class AddChar_Diag(QtWidgets.QDialog):
     def __init__(self, Parent=None):
         super().__init__()
         self.parent = Parent
-        self.level = -1
+        self.level = self.parent.level
         self.index = 0
-        self.questions = self.parent.story.questions
+        self.story = self.parent.story
         self.character = None
         self.FirstRun = True
-        self.setGeometry(100,100,500,250)
+        self.edit_areas = []
+        
+        self.setGeometry(100,100,960,800)
+
+
         self.UiComponents()
         self.show()
+        self.update()
         self.resized.connect(self.update)
-        self.UiComponents()
-        self.move_next()
+        #self.move_next()
 
     def UiComponents(self):
-        self.question = QtWidgets.QLabel(self)
-        self.next_button = QtWidgets.QPushButton(self)
-        self.level_button = QtWidgets.QRadioButton(self)
-        self.low_det = QtWidgets.QAction(self)
-        self.low_det.setText("Low Detail")
-        self.med_det = QtWidgets.QAction(self)
-        self.med_det.setText("Medium Detail")
-        self.high_det = QtWidgets.QAction(self)
-        self.high_det.setText("High Detail")
-        self.level_button.addAction(self.low_det)
-        self.level_button.addAction(self.med_det)
-        self.level_button.addAction(self.high_det)
-        self.text = QtWidgets.QTextEdit(self)
-        self.text.setHidden(True)
-        self.next_button.clicked.connect(self.move_next)
+        # set up buttons and picture spots
+        self.save = QtWidgets.QPushButton(self)
+        self.cancel = QtWidgets.QPushButton(self)
+        self.image = QtWidgets.QLabel(self)
+        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_button = QtWidgets.QPushButton(self)
+
+        self.save.setText("Save")
+        self.cancel.setText("Cancel")
+        self.image_button.setText("Load Image")
+
+        # connect buttons
+        self.save.clicked.connect(self.save_char)
+        self.cancel.clicked.connect(self.cancel_char)
+        self.image_button.clicked.connect(self.load_img)
+
+        self.image.setPixmap(self.image_path)
+
+        # move buttons
+        self.save.setGeometry(int(self.width()/2) + 30, self.height() -30, 100, 35)
+        self.cancel.setGeometry(int(3*self.width()/4) + 30, self.height() -30, 100, 35)
+        self.image_button.setGeometry(int(2*self.width()/3), int(self.height()/2) + 20, 100, 35)
+
+        # set up scroll area for questions
+        self.scroll = QtWidgets.QScrollArea(self)
+        self.widget = QtWidgets.QWidget(self)
+        self.vbox = QtWidgets.QVBoxLayout(self)
+
+        current_y = 0
+
+        # add questions and spots to answer them
+        for question in self.story.questions["Questions"]:
+            if question["Priority"] <= self.level:
+                quest = QtWidgets.QLabel(self)
+                quest.setText(question["QuestionString"])
+                quest.setGeometry(10, current_y, int(self.width()/2), 80)
+                current_y = current_y + 90
+
+                text_box = QtWidgets.QPlainTextEdit(self)
+                text_box.setGeometry(10, current_y, int(self.width()/2) -40, 180)
+                self.edit_areas.append(text_box)
+                current_y = current_y + 190
+
+                self.vbox.addWidget(quest)
+                self.vbox.addWidget(text_box)
 
 
-        self.question.setGeometry(20, 20, 250, 25)
-        self.text.setGeometry(10, 50, self.geometry().width() -20, self.geometry().height()-50)
+        # finish up the scroll layout
+        self.widget.setLayout(self.vbox)
+
+        self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+
+
+    # triggers resize events 
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(AddChar_Diag, self).resizeEvent(event)
 
     def update(self):
-        geom = self.geometry()
-        x = geom.width()
-        y = geom.height()
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+        for editor in self.edit_areas:
+            editor_geom = editor.geometry()
+            editor.setGeometry(10, editor_geom.y(), int(self.width()/2) -40, 80)
 
+        self.image.setPixmap(self.image_path.scaled(int(self.width()/2)-60, int(self.height()/2)- 60)) #QtCore.Qt.KeepAspectRatio,
+        self.image.setGeometry(int(self.width()/2) + 30 , 30, int(self.width()/2)-60, int(self.height()/2)- 60)
         
 
-    def run(self):
-        if self.FirstRun:
-            self.startup()
+        self.save.setGeometry(int(3*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.cancel.setGeometry(int(5*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.image_button.setGeometry(int(3*self.width()/4)-50, int(self.height()/2) + 20, 100, 35)
 
-        self.move_next()
 
-    def startup(self):
-        
+    def save_char(self):
+        print("Window dimensions: %d x %d" % (self.width(), self.height()))
         return
 
-    def ask_question(self, q):
-        self.question.setText(q)
+    def cancel_char(self):
+        return
 
-    def move_next(self):
-        if self.FirstRun:
-            if self.level == 0:
-                # check which level the user wants to do
-                return
-            else:
-                # get's the character's name
-                return
-            
-            
-        data = self.text.toPlainText()
-        char_attr = Attribute()
-        char_attr.set_e1(self.questions["Questions"][self.index]["QuestionString"])
-        char_attr.set_e2(data)
+    def load_img(self):
+        return
 
-        self.character
 
+        
+
+class ComplexityLvl_Diag(QtWidgets.QDialog):
+    def __init__(self, Parent=None):
+        super().__init__()
+        self.parent = Parent
+        self.story = self.parent.story
+        self.setGeometry(800, 800, 420, 180)
+        self.level = -1
+        self.UiComponents()
+        self.show()
+
+    def UiComponents(self):
+        # set up buttons
+        self.low_comp_button = QtWidgets.QPushButton(self)
+        self.med_comp_button = QtWidgets.QPushButton(self)
+        self.high_comp_button = QtWidgets.QPushButton(self)
+
+        # set up labels and button texts
+        self.low_comp_button.setText("Low Complexity")
+        self.med_comp_button.setText("Medium Complexity")
+        self.high_comp_button.setText("High Complexity")
+
+        self.lab = QtWidgets.QLabel(self)
+
+        # Position the buttons
+        self.lab.setGeometry(int(self.width()/2) - 170, 20, 340, 30)
+        self.lab.setText("How Complex of a character would you like to make?")
+
+        self.low_comp_button.setGeometry(10, 80, 130, 25)
+        self.med_comp_button.setGeometry(145, 80, 130, 25)
+        self.high_comp_button.setGeometry(280, 80, 130, 25)
+
+        # hook up the buttons 
+        self.low_comp_button.clicked.connect(self.low)
+        self.med_comp_button.clicked.connect(self.med)
+        self.high_comp_button.clicked.connect(self.high)
+
+    def low(self):
+        self.hide()
+        self.level = 1
+        win = AddChar_Diag(self)
+        win.exec()
+        return
+
+    def med(self):
+        self.hide()
+        self.level = 2
+        win = AddChar_Diag(self)
+        win.exec()
+        return
+
+    def high(self):
+        self.hide()
+        self.level = 3
+        win = AddChar_Diag(self)
+        win.exec()
         return
