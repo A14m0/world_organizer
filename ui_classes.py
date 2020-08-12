@@ -121,7 +121,10 @@ class AddChar_Diag(QtWidgets.QDialog):
         self.close()
 
     def load_img(self):
-        return
+        img_name = open_file()
+        if img_name != "":
+            self.image_path = QtGui.QPixmap(img_name)
+            self.update()
 
 
         
@@ -131,7 +134,7 @@ class ComplexityLvl_Diag(QtWidgets.QDialog):
         super().__init__()
         self.parent = Parent
         self.story = self.parent.story
-        self.setGeometry(800, 800, 420, 180)
+        self.setGeometry(600, 400, 420, 180)
         self.level = -1
         self.UiComponents()
         self.show()
@@ -182,3 +185,14 @@ class ComplexityLvl_Diag(QtWidgets.QDialog):
         win = AddChar_Diag(self)
         win.exec()
         return
+
+def open_file():
+    obj = QtWidgets.QFileDialog()
+    filepath = obj.getOpenFileName(None, "Select file", "", "Image Files (*.jpg *.png)")
+    
+    if not filepath:
+        return 0
+
+    name = filepath[0]
+
+    return name  

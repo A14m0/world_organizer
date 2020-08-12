@@ -104,11 +104,17 @@ class MainWin(QtWidgets.QMainWindow):
         self.world_prop_tree = QtWidgets.QTreeWidget(self)
         self.world_prop_tree.setHeaderLabel("World Properties")
 
+        # set tree geometry
         self.char_tree.setGeometry(230, 30, 300, 180)
         self.event_tree.setGeometry(550, 30, 300, 180)
         self.location_tree.setGeometry(230, 230, 300, 180)
         self.world_prop_tree.setGeometry(550, 230, 300, 180)
 
+        # set up signal handlers (data, column)
+        self.char_tree.itemDoubleClicked.connect(self.Junk)
+        self.event_tree.itemDoubleClicked.connect(self.Junk)
+        self.location_tree.itemDoubleClicked.connect(self.Junk)
+        self.world_prop_tree.itemDoubleClicked.connect(self.Junk)
 
         self.update_stuff()
 
@@ -147,28 +153,33 @@ class MainWin(QtWidgets.QMainWindow):
 
         # re-add all of the entries
         for character in self.story.get_characters():
-            entry = QtWidgets.QTreeWidgetItem(character.get_text())
+            entry = QtWidgets.QTreeWidgetItem(self.char_tree)
             entry.setText(0, character.get_text())
-            entry.setData(0, QtCore.Qt.EditRole, character)
+            entry.setData(0, QtCore.Qt.UserRole, QtCore.QVariant(character))
             self.char_tree.addTopLevelItem(entry)
 
         for event in self.story.get_events():
-            entry = QtWidgets.QTreeWidgetItem(event.get_text())
+            entry = QtWidgets.QTreeWidgetItem(self.event_tree)
             entry.setText(0, event.get_text())
-            entry.setData(0, QtCore.Qt.EditRole, event)
+            entry.setData(0, QtCore.Qt.UserRole, QtCore.QVariant(event))
             self.char_tree.addTopLevelItem(entry)
 
         for location in self.story.get_locations():
-            entry = QtWidgets.QTreeWidgetItem(location.get_text())
+            entry = QtWidgets.QTreeWidgetItem(self.location_tree)
             entry.setText(0, location.get_text())
-            entry.setData(0, QtCore.Qt.EditRole, location)
+            entry.setData(0, QtCore.Qt.UserRole, QtCore.QVariant(location))
             self.char_tree.addTopLevelItem(entry)
 
         for attr in self.story.get_world_attr():
-            entry = QtWidgets.QTreeWidgetItem(attr.get_text())
+            entry = QtWidgets.QTreeWidgetItem(self.world_prop_tree)
             entry.setText(0, attr.get_text())
-            entry.setData(0, QtCore.Qt.EditRole, attr)
+            entry.setData(0, QtCore.Qt.UserRole, QtCore.QVariant(attr))
             self.char_tree.addTopLevelItem(entry)
+        
+        # update labels
+        self.story_str_label.setText("Story Name: " + self.story.get_title())
+        self.char_num_label.setText("Number of Characters: " + str(len(self.story.get_characters())))
+        self.event_num_label.setText("Number of Events: " + str(len(self.story.get_events())))
         
 
     # junk file
