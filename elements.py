@@ -84,14 +84,15 @@ class World_Prop(Base):
 
 # class that holds specific information about a story
 class Story(Base):
-    def __init__(self, questions):
+    def __init__(self, title, questions):
         self.characters = []
         self.events = []
         self.locations = []
         self.world_attributes = []
+        self.notes = ""
         
         self.path = None
-        self.title = "Default"
+        self.title = title
         self.questions = questions
 
     def add_character(self, character):
@@ -150,6 +151,7 @@ class Story(Base):
         # initialize the json structure
         data = {}
         data["Title"] = self.title
+        data["Notes"] = self.notes
         data["Characters"] = []
         data["Events"] = []
         data["Locations"] = []
@@ -222,9 +224,11 @@ class Story(Base):
         self.events.clear()
         self.locations.clear()
         self.world_attributes.clear()
+        self.notes = ""
 
         # load the title
         self.title = dat["Title"]
+        self.notes = dat["Notes"]
 
         # load all of the characters stored in the story
         for character in dat["Characters"]:

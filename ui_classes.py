@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from elements import *
+from elements import Character, Attribute, Event, Location, World_Prop, Story 
 
 
 # dialog for adding a character
@@ -602,6 +602,57 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
         if img_name != "":
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
+
+
+# class to set up a new story
+class NewStory_Diag(QtWidgets.QDialog):
+    resized = QtCore.pyqtSignal()
+    def __init__(self, Parent=None):
+        super().__init__()
+
+        self.parent = Parent
+        self.story = None
+
+        self.setGeometry(800, 800, 360, 240)
+        self.resized.connect(self.update)
+        self.Ui_Components()
+        self.update()
+
+    def Ui_Components(self):
+        # set up base widgets
+        self.next = QtWidgets.QPushButton(self)
+        self.cancel = QtWidgets.QPushButton(self)
+        self.title_label = QtWidgets.QLabel(self)
+        self.edit = QtWidgets.QLineEdit(self)
+
+        # set up widget text
+        self.next.setText("Create")
+        self.cancel.setText("Cancel")
+        self.title_label.setText("Enter the title of the new story")
+
+        # connect the buttons
+        self.next.clicked.connect(self.cont)
+        self.cancel.clicked.connect(self.close)
+        
+    # catch resize events
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(NewStory_Diag, self).resizeEvent(event)
+
+    def update(self):
+        # position the text label
+        self.title_label.setGeometry(int(self.width()/2) -85, 25, 200, 25)
+        self.edit.setGeometry(10, 70, self.width() - 20, 25)
+        self.next.setGeometry(int(self.width()/4) -40,self.height() - 50,100, 35)
+        self.cancel.setGeometry(int(3*self.width()/4) -40,self.height() - 50, 100, 35)
+        
+        return
+
+    def cont(self):
+        title = self.edit.text()
+        self.parent.story = Story(title, self.parent.story.questions)
+        self.close()
+
 
 
 

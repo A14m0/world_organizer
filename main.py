@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 import sys
 
 import ui_classes
-from elements import *
+from elements import Story
 
 low_complexity = 1
 med_complexity = 2
@@ -216,15 +216,15 @@ class MainWin(QtWidgets.QMainWindow):
 
     def load_story(self):
         path = ui_classes.open_file("Story Files (*.json)")
-        self.story.load(path)
-        self.reload_trees()
+        if path != "":
+            self.story.load(path)
+            self.reload_trees()
         return
 
     def new_story(self):
-        self.story.clear()
-
-        # Note to self:
-        # add a dialog here to we can define story titles
+        
+        win = ui_classes.NewStory_Diag(self)
+        win.exec()
 
         self.reload_trees()
         return
@@ -259,7 +259,7 @@ class MainWin(QtWidgets.QMainWindow):
 
 def main():
     App = QtWidgets.QApplication(sys.argv) 
-    story = Story(questions)
+    story = Story("Default", questions)
     
     # create the instance of our Window 
     window = MainWin(story) 
