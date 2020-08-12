@@ -1,30 +1,4 @@
-# class for printing fancy text
-class bcolors:
-    HEADER = '\033[95m'
-    CYAN = '\033[0;36m'
-    DARKRED = '\033[0;31m'
-    YELLOW = '\033[0;33m'
-    BRIGHTYELLOW = '\033[1;33m'
-    PURPLE = '\033[0;35m'
-    BRIGHTPURPLE = '\033[1;35m\033[1;41m'
-    BLUE = '\033[0;34m'
-    BRIGHTBLUE = '\033[1;34m'
-    BLACK = '\033[0;30m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    BACK_RED = '\033[0;41m'
-    BACK_BRIGHTRED = '\033[1;41m'
-    BACK_GREEN = '\033[0;42m'
-    BACK_BRIGHTGREEN = '\033[1;42m'
-    BACK_YELLOW = '\033[0;43m'
-    BACK_BRIGHTYELLOW = '\033[1;43m'
-    BACK_BLUE = '\033[0;44m'
-    BACK_BRIGHTBLUE = '\033[1;44m'
-    BACK_PURPLE = '\033[0;45m'
-    BACK_BRIGHTPURPLE = '\033[1;45m'
-    BLACK_RED = '\033[0;30m\033[1;41m'
-
+import json
 
 # base class that defines required generic functions
 class Base:
@@ -81,7 +55,7 @@ class Event(Base):
 
 
 # class that defines a world location
-class Locations(Base):
+class Location(Base):
     def __init__(self, name, description, notes):
         self.name = name
         self.description = description
@@ -134,9 +108,105 @@ class Story(Base):
         self.notes.append(note)
 
     def save(self):
-        return None
+        # initialize the json structure
+        data = {}
+        data["Characters"] = []
+        data["Events"] = []
+        data["Locations"] = []
+        data["World_Properties"] = []
+
+        # read all characters
+        for character in self.characters:
+            tmp_dat = {}
+            tmp_dat["Name"] = character.get_text()
+            tmp_dat["Attributes"] = []
+
+            # read all of the target character's attributes
+            for attr in character.attributes:
+                tmp_dat["Attributes"].append({
+                    "Element1": attr.ele1,
+                    "Element2": attr.ele2
+                })
+            # append character to the data
+            data["Characters"].append(tmp_dat)
+        
+        # same thing for events...
+        for event in self.events:
+            tmp_dat = {}
+            tmp_dat["Short"] = event.get_text()
+            tmp_dat["Date"] = event.Date
+            tmp_dat["Time"] = event.Time
+            tmp_dat["Location"] = event.Location
+            tmp_dat["Description"] = event.Description
+
+            # append event to the data
+            data["Events"].append(tmp_dat)
+
+        # ... and for locations...
+        for location in self.locations:
+            tmp_dat = {}
+            tmp_dat["Name"] = location.get_text()
+            tmp_dat["Description"] = location.description
+            tmp_dat["Notes"] = location.notes
+
+            # append location to the data
+            data["Locations"].append(tmp_dat)
+
+        # ... and for world properties
+        for prop in self.world_attributes:
+            tmp_dat = {}
+            tmp_dat["Name"] = prop.get_text()
+            tmp_dat["Notes"] = prop.notes
+
+            # append location to the data
+            data["World_Properties"].append(tmp_dat)
+
+        with open("test_story.json", "w") as f:
+            json.dump(data, f)
+            f.close()
+
+        return
 
     def load(self, path):
+        with open(path, "r") as f:
+            dat = json.load(f)
+
+        # clear out the current lists
+        self.characters.clear()
+        self.events.clear()
+        self.locations.clear()
+        self.world_attributes.clear()
+
+        # load all of the characters stored in the story
+        for character in dat["Characters"]:
+            char = Character(character["Name"])
+            for attr in character["Attributes"]:
+                tmp_attr = Attribute()
+                tmp_attr.set_e1(attr["Element1"])
+                tmp_attr.set_e2(attr["Element2"])
+                char.add_attribute(tmp_attr)
+            self.add_character(char)
+
+        # load all events 
+        for event in dat["Events"]:
+            tmp_evt = Event(event["Short"], event["Date"], 
+                            event["Time"], event["Location"], 
+                            event["Description"])
+            self.add_event(tmp_evt)
+
+        # load all locations
+        for location in dat["Locations"]:
+            tmp_loc = Location(location["Name"], 
+                            location["Description"], 
+                            location["Notes"])
+            self.add_location(tmp_loc)
+
+        # load all world attributes
+        for propert in dat["World_Properties"]:
+            tmp_prop = World_Prop(propert["Name"], 
+                            propert["Notes"])
+            self.add_world_attr(tmp_prop)
+
         return None
         
     def get_title(self):

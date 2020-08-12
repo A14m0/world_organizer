@@ -33,16 +33,15 @@ class MainWin(QtWidgets.QMainWindow):
 
     def UiComponents(self):
         # gets variables for defining windows
-        x = self.width()
         y = self.height()
 
         # initialize the File menu
         self.menu_file = QtWidgets.QMenu(self)
         self.menu_file.setTitle("File")
         self.menu_file.addAction("New Story", self.Junk)
-        self.menu_file.addAction("Load Story", self.Junk)
+        self.menu_file.addAction("Load Story", self.load_story)
         self.menu_file.addSeparator()
-        self.menu_file.addAction("Save Story", self.Junk)
+        self.menu_file.addAction("Save Story", self.story.save)
 
         # initialize the Tools menu
         self.menu_tools = QtWidgets.QMenu(self)
@@ -215,86 +214,22 @@ class MainWin(QtWidgets.QMainWindow):
         self.reload_trees()
         return
 
+    def load_story(self):
+        path = ui_classes.open_file("Story Files (*.json)")
+        self.story.load(path)
+        self.reload_trees()
 
 
-
-
-
-
-
-def full_char(name):
-
-
-    character = Character(name)
-    for question in questions["Questions"]:
-        element = Attribute()
-        element.set_e1(question["QuestionString"])
-        answer = input(question["QuestionString"] + " > ")
-        element.set_e2(answer)
-        character.add_attribute(element)
-
-    print("\n" * 4)
-    print("-"*20)
-    print(character)
+def main():
+    App = QtWidgets.QApplication(sys.argv) 
+    story = Story(questions)
     
+    # create the instance of our Window 
+    window = MainWin(story) 
 
-def med_char(name):
-    ret_str = ""
-    for question in questions["Questions"]:
-        if question["Priority"] != 3:
-            answer = input(question["QuestionString"] + " > ")
-            ret_str += "%s: %s\n" % (question["QuestionString"], answer)
-    print("\n" * 4)
-    print("-"*20)
-    print("Generated character information: ")
-    print(ret_str)
-    return
-
-def min_char(name):
-    ret_str = ""
-    for question in questions["Questions"]:
-        if question["Priority"] == 1:
-            answer = input(question["QuestionString"] + " > ")
-            ret_str += "%s: %s\n" % (question["QuestionString"], answer)
-    print("\n" * 4)
-    print("-"*20)
-    print("Generated character information: ")
-    print(ret_str)
-    return
-
-
-
-def main(ye_olden_flag):
-    if not ye_olden_flag:
-        App = QtWidgets.QApplication(sys.argv) 
-
-        story = Story(questions)
-    
-        # create the instance of our Window 
-        window = MainWin(story) 
-
-        # start the app 
-        sys.exit(App.exec())
-    else:
-
-        name = "Test Name"
-        levl = input("How in depth would you like to go? (1 (low), 2 (moderate), 3 (high)) > ")
-        try:
-            levl = int(levl)
-        except ValueError:
-            print("Failed to determine complexity. Please enter a valid complexity level")
-            return
-        if levl == low_complexity:
-            min_char(name = "Test Name")
-        elif levl == med_complexity:
-            med_char(name = "Test Name")
-        else:
-            full_char(name = "Test Name")
-
+    # start the app 
+    sys.exit(App.exec())
     
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        main(True)
-    else:
-        main(False)
+    main()

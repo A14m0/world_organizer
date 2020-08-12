@@ -124,7 +124,7 @@ class AddChar_Diag(QtWidgets.QDialog):
         self.close()
 
     def load_img(self):
-        img_name = open_file()
+        img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
@@ -298,7 +298,7 @@ class AddEvent_Diag(QtWidgets.QDialog):
         self.close()
 
     def load_img(self):
-        img_name = open_file()
+        img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
@@ -405,7 +405,7 @@ class AddLocation_Diag(QtWidgets.QDialog):
 
     def save_char(self):
         
-        loc = Locations(self.edit_areas[0].toPlainText(), 
+        loc = Location(self.edit_areas[0].toPlainText(), 
                         self.edit_areas[1].toPlainText(), 
                         self.edit_areas[2].toPlainText())
         
@@ -413,7 +413,7 @@ class AddLocation_Diag(QtWidgets.QDialog):
         self.close()
 
     def load_img(self):
-        img_name = open_file()
+        img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
@@ -525,16 +525,16 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
         self.close()
 
     def load_img(self):
-        img_name = open_file()
+        img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
 
 
 
-def open_file():
+def open_file(filtr):
     obj = QtWidgets.QFileDialog()
-    filepath = obj.getOpenFileName(None, "Select file", "", "Image Files (*.jpg *.png)")
+    filepath = obj.getOpenFileName(None, "Select file", "", filtr)
     
     if not filepath:
         return 0
