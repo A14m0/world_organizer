@@ -614,4 +614,13 @@ def open_file(filtr):
 
     name = filepath[0]
 
-    return name  
+    return name
+
+def save_path():
+    obj = QtWidgets.QFileDialog()
+    path = obj.getSaveFileName(None, "Select save location", "", "")
+
+    if not path:
+        return 0
+    
+    return path[0]

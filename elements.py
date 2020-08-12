@@ -1,4 +1,5 @@
 import json
+import ui_classes
 
 # base class that defines required generic functions
 class Base:
@@ -89,6 +90,8 @@ class Story(Base):
         self.locations = []
         self.world_attributes = []
         
+        self.path = None
+        self.title = "Test Story"
         self.questions = questions
 
     def add_character(self, character):
@@ -146,6 +149,7 @@ class Story(Base):
     def save(self):
         # initialize the json structure
         data = {}
+        data["Title"] = self.title
         data["Characters"] = []
         data["Events"] = []
         data["Locations"] = []
@@ -197,7 +201,11 @@ class Story(Base):
             # append location to the data
             data["World_Properties"].append(tmp_dat)
 
-        with open("test_story.json", "w") as f:
+
+        if self.path is None:
+            self.path = ui_classes.save_path()
+        
+        with open(self.path, "w") as f:
             json.dump(data, f)
             f.close()
 
@@ -252,7 +260,7 @@ class Story(Base):
         self.world_attributes = []
         
     def get_title(self):
-        return "Test Story"
+        return self.title
     
     def get_characters(self):
         return self.characters

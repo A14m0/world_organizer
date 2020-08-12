@@ -222,6 +222,10 @@ class MainWin(QtWidgets.QMainWindow):
 
     def new_story(self):
         self.story.clear()
+
+        # Note to self:
+        # add a dialog here to we can define story titles
+
         self.reload_trees()
         return
 
