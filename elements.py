@@ -91,7 +91,7 @@ class Story(Base):
         self.world_attributes = []
         
         self.path = None
-        self.title = "Test Story"
+        self.title = "Default"
         self.questions = questions
 
     def add_character(self, character):
@@ -212,7 +212,9 @@ class Story(Base):
         return
 
     def load(self, path):
-        with open(path, "r") as f:
+        self.path = path
+
+        with open(self.path, "r") as f:
             dat = json.load(f)
 
         # clear out the current lists
@@ -220,6 +222,9 @@ class Story(Base):
         self.events.clear()
         self.locations.clear()
         self.world_attributes.clear()
+
+        # load the title
+        self.title = dat["Title"]
 
         # load all of the characters stored in the story
         for character in dat["Characters"]:
@@ -258,6 +263,8 @@ class Story(Base):
         self.events = []
         self.locations = []
         self.world_attributes = []
+
+        self.title = "None"
         
     def get_title(self):
         return self.title
