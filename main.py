@@ -77,9 +77,9 @@ class MainWin(QtWidgets.QMainWindow):
         self.add_world_elem_button.setText("Add World Attribute")
 
         self.add_char_button.clicked.connect(self.add_character)
-        self.add_event_button.clicked.connect(self.Junk)
-        self.add_location_button.clicked.connect(self.Junk)
-        self.add_world_elem_button.clicked.connect(self.Junk)
+        self.add_event_button.clicked.connect(self.add_event)
+        self.add_location_button.clicked.connect(self.add_location)
+        self.add_world_elem_button.clicked.connect(self.add_world_attr)
 
         # initialize Information Labels
         self.story_str_label = QtWidgets.QLabel(self)
@@ -198,12 +198,21 @@ class MainWin(QtWidgets.QMainWindow):
         return
 
     def add_event(self):
+        win = ui_classes.AddEvent_Diag(self)
+        win.exec()
+        self.reload_trees()
         return
 
     def add_location(self):
+        win = ui_classes.AddLocation_Diag(self)
+        win.exec()
+        self.reload_trees()
         return
 
     def add_world_attr(self):
+        win = ui_classes.AddWorldProp_Diag(self)
+        win.exec()
+        self.reload_trees()
         return
 
 

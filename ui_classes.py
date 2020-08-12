@@ -186,6 +186,349 @@ class ComplexityLvl_Diag(QtWidgets.QDialog):
         win.exec()
         return
 
+class AddEvent_Diag(QtWidgets.QDialog):
+    resized = QtCore.pyqtSignal()
+    def __init__(self, Parent=None):
+        super().__init__()
+        self.parent = Parent
+        self.story = self.parent.story
+        self.event = None
+        self.questions = ["Short Description (few words)",\
+                         "Date the event occurred", "Time the event occurred",\
+                         "Location the event happened at", "Description of the event"]
+        self.edit_areas = []
+        self.setGeometry(100,100,960,800)
+
+
+        self.UiComponents()
+        self.show()
+        self.update()
+        self.resized.connect(self.update)
+        #self.move_next()
+
+    def UiComponents(self):
+        # set up buttons and picture spots
+        self.save = QtWidgets.QPushButton(self)
+        self.cancel = QtWidgets.QPushButton(self)
+        self.image = QtWidgets.QLabel(self)
+        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_button = QtWidgets.QPushButton(self)
+
+        self.save.setText("Save")
+        self.cancel.setText("Cancel")
+        self.image_button.setText("Load Image")
+
+        # connect buttons
+        self.save.clicked.connect(self.save_char)
+        self.cancel.clicked.connect(self.close)
+        self.image_button.clicked.connect(self.load_img)
+
+        self.image.setPixmap(self.image_path)
+
+        # move buttons
+        self.save.setGeometry(int(self.width()/2) + 30, self.height() -30, 100, 35)
+        self.cancel.setGeometry(int(3*self.width()/4) + 30, self.height() -30, 100, 35)
+        self.image_button.setGeometry(int(2*self.width()/3), int(self.height()/2) + 20, 100, 35)
+
+        # set up scroll area for questions
+        self.scroll = QtWidgets.QScrollArea(self)
+        self.widget = QtWidgets.QWidget(self)
+        self.vbox = QtWidgets.QVBoxLayout(self)
+
+        current_y = 0
+
+        # add questions and spots to answer them
+        for question in self.questions:
+            quest = QtWidgets.QLabel(self)
+            quest.setText(question)
+            quest.setGeometry(10, current_y, int(self.width()/2), 80)
+            current_y = current_y + 90
+
+            text_box = QtWidgets.QPlainTextEdit(self)
+            text_box.setGeometry(10, current_y, int(self.width()/2) -40, 180)
+            self.edit_areas.append(text_box)
+            current_y = current_y + 190
+
+            self.vbox.addWidget(quest)
+            self.vbox.addWidget(text_box)
+
+
+        # finish up the scroll layout
+        self.widget.setLayout(self.vbox)
+
+        self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+
+
+    # triggers resize events 
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(AddEvent_Diag, self).resizeEvent(event)
+
+    def update(self):
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+        for editor in self.edit_areas:
+            editor_geom = editor.geometry()
+            editor.setGeometry(10, editor_geom.y(), int(self.width()/2) -40, 80)
+
+        self.image.setPixmap(self.image_path.scaled(int(self.width()/2)-60, int(self.height()/2)- 60)) #QtCore.Qt.KeepAspectRatio,
+        self.image.setGeometry(int(self.width()/2) + 30 , 30, int(self.width()/2)-60, int(self.height()/2)- 60)
+        
+
+        self.save.setGeometry(int(3*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.cancel.setGeometry(int(5*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.image_button.setGeometry(int(3*self.width()/4)-50, int(self.height()/2) + 20, 100, 35)
+
+
+    def save_char(self):
+        
+        evt = Event(self.edit_areas[0].toPlainText(), 
+                    self.edit_areas[1].toPlainText(), 
+                    self.edit_areas[2].toPlainText(),
+                    self.edit_areas[3].toPlainText(), 
+                    self.edit_areas[4].toPlainText())
+        
+        self.story.add_event(evt)
+        self.close()
+
+    def load_img(self):
+        img_name = open_file()
+        if img_name != "":
+            self.image_path = QtGui.QPixmap(img_name)
+            self.update()
+
+
+
+
+class AddLocation_Diag(QtWidgets.QDialog):
+    resized = QtCore.pyqtSignal()
+    def __init__(self, Parent=None):
+        super().__init__()
+        self.parent = Parent
+        self.story = self.parent.story
+        self.event = None
+        self.questions = ["Location Name",\
+                         "Location Description",\
+                         "Other notes"]
+        self.edit_areas = []
+        self.setGeometry(100,100,960,800)
+
+
+        self.UiComponents()
+        self.show()
+        self.update()
+        self.resized.connect(self.update)
+        #self.move_next()
+
+    def UiComponents(self):
+        # set up buttons and picture spots
+        self.save = QtWidgets.QPushButton(self)
+        self.cancel = QtWidgets.QPushButton(self)
+        self.image = QtWidgets.QLabel(self)
+        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_button = QtWidgets.QPushButton(self)
+
+        self.save.setText("Save")
+        self.cancel.setText("Cancel")
+        self.image_button.setText("Load Image")
+
+        # connect buttons
+        self.save.clicked.connect(self.save_char)
+        self.cancel.clicked.connect(self.close)
+        self.image_button.clicked.connect(self.load_img)
+
+        self.image.setPixmap(self.image_path)
+
+        # move buttons
+        self.save.setGeometry(int(self.width()/2) + 30, self.height() -30, 100, 35)
+        self.cancel.setGeometry(int(3*self.width()/4) + 30, self.height() -30, 100, 35)
+        self.image_button.setGeometry(int(2*self.width()/3), int(self.height()/2) + 20, 100, 35)
+
+        # set up scroll area for questions
+        self.scroll = QtWidgets.QScrollArea(self)
+        self.widget = QtWidgets.QWidget(self)
+        self.vbox = QtWidgets.QVBoxLayout(self)
+
+        current_y = 0
+
+        # add questions and spots to answer them
+        for question in self.questions:
+            quest = QtWidgets.QLabel(self)
+            quest.setText(question)
+            quest.setGeometry(10, current_y, int(self.width()/2), 80)
+            current_y = current_y + 90
+
+            text_box = QtWidgets.QPlainTextEdit(self)
+            text_box.setGeometry(10, current_y, int(self.width()/2) -40, 180)
+            self.edit_areas.append(text_box)
+            current_y = current_y + 190
+
+            self.vbox.addWidget(quest)
+            self.vbox.addWidget(text_box)
+
+
+        # finish up the scroll layout
+        self.widget.setLayout(self.vbox)
+
+        self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+
+
+    # triggers resize events 
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(AddLocation_Diag, self).resizeEvent(event)
+
+    def update(self):
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+        for editor in self.edit_areas:
+            editor_geom = editor.geometry()
+            editor.setGeometry(10, editor_geom.y(), int(self.width()/2) -40, 80)
+
+        self.image.setPixmap(self.image_path.scaled(int(self.width()/2)-60, int(self.height()/2)- 60)) #QtCore.Qt.KeepAspectRatio,
+        self.image.setGeometry(int(self.width()/2) + 30 , 30, int(self.width()/2)-60, int(self.height()/2)- 60)
+        
+
+        self.save.setGeometry(int(3*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.cancel.setGeometry(int(5*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.image_button.setGeometry(int(3*self.width()/4)-50, int(self.height()/2) + 20, 100, 35)
+
+
+    def save_char(self):
+        
+        loc = Locations(self.edit_areas[0].toPlainText(), 
+                        self.edit_areas[1].toPlainText(), 
+                        self.edit_areas[2].toPlainText())
+        
+        self.story.add_location(loc)
+        self.close()
+
+    def load_img(self):
+        img_name = open_file()
+        if img_name != "":
+            self.image_path = QtGui.QPixmap(img_name)
+            self.update()
+
+
+# dialogue to add a new World Property
+class AddWorldProp_Diag(QtWidgets.QDialog):
+    resized = QtCore.pyqtSignal()
+    def __init__(self, Parent=None):
+        super().__init__()
+        self.parent = Parent
+        self.story = self.parent.story
+        self.event = None
+        self.questions = ["World Property Name",\
+                         "Notes about the property"]
+        self.edit_areas = []
+        self.setGeometry(100,100,960,800)
+
+
+        self.UiComponents()
+        self.show()
+        self.update()
+        self.resized.connect(self.update)
+        #self.move_next()
+
+    def UiComponents(self):
+        # set up buttons and picture spots
+        self.save = QtWidgets.QPushButton(self)
+        self.cancel = QtWidgets.QPushButton(self)
+        self.image = QtWidgets.QLabel(self)
+        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_button = QtWidgets.QPushButton(self)
+
+        self.save.setText("Save")
+        self.cancel.setText("Cancel")
+        self.image_button.setText("Load Image")
+
+        # connect buttons
+        self.save.clicked.connect(self.save_char)
+        self.cancel.clicked.connect(self.close)
+        self.image_button.clicked.connect(self.load_img)
+
+        self.image.setPixmap(self.image_path)
+
+        # move buttons
+        self.save.setGeometry(int(self.width()/2) + 30, self.height() -30, 100, 35)
+        self.cancel.setGeometry(int(3*self.width()/4) + 30, self.height() -30, 100, 35)
+        self.image_button.setGeometry(int(2*self.width()/3), int(self.height()/2) + 20, 100, 35)
+
+        # set up scroll area for questions
+        self.scroll = QtWidgets.QScrollArea(self)
+        self.widget = QtWidgets.QWidget(self)
+        self.vbox = QtWidgets.QVBoxLayout(self)
+
+        current_y = 0
+
+        # add questions and spots to answer them
+        for question in self.questions:
+            quest = QtWidgets.QLabel(self)
+            quest.setText(question)
+            quest.setGeometry(10, current_y, int(self.width()/2), 80)
+            current_y = current_y + 90
+
+            text_box = QtWidgets.QPlainTextEdit(self)
+            text_box.setGeometry(10, current_y, int(self.width()/2) -40, 180)
+            self.edit_areas.append(text_box)
+            current_y = current_y + 190
+
+            self.vbox.addWidget(quest)
+            self.vbox.addWidget(text_box)
+
+
+        # finish up the scroll layout
+        self.widget.setLayout(self.vbox)
+
+        self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+
+
+    # triggers resize events 
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(AddWorldProp_Diag, self).resizeEvent(event)
+
+    def update(self):
+        self.scroll.setGeometry(0, 0, int(self.width()/2), self.height())
+        for editor in self.edit_areas:
+            editor_geom = editor.geometry()
+            editor.setGeometry(10, editor_geom.y(), int(self.width()/2) -40, 80)
+
+        self.image.setPixmap(self.image_path.scaled(int(self.width()/2)-60, int(self.height()/2)- 60)) #QtCore.Qt.KeepAspectRatio,
+        self.image.setGeometry(int(self.width()/2) + 30 , 30, int(self.width()/2)-60, int(self.height()/2)- 60)
+        
+
+        self.save.setGeometry(int(3*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.cancel.setGeometry(int(5*self.width()/6) + 30, self.height() -45, 100, 35)
+        self.image_button.setGeometry(int(3*self.width()/4)-50, int(self.height()/2) + 20, 100, 35)
+
+
+    def save_char(self):
+        
+        prop = World_Prop(self.edit_areas[0].toPlainText(), 
+                        self.edit_areas[1].toPlainText())
+        
+        self.story.add_world_attr(prop)
+        self.close()
+
+    def load_img(self):
+        img_name = open_file()
+        if img_name != "":
+            self.image_path = QtGui.QPixmap(img_name)
+            self.update()
+
+
+
 def open_file():
     obj = QtWidgets.QFileDialog()
     filepath = obj.getOpenFileName(None, "Select file", "", "Image Files (*.jpg *.png)")

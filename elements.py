@@ -94,6 +94,19 @@ class Locations(Base):
     def get_text(self):
         return self.name
 
+
+# class that defines a world property
+class World_Prop(Base):
+    def __init__(self, name, notes):
+        self.name = name
+        self.notes = notes
+
+    def __str__(self):
+        return "Name: %s, Notes: %s" % (self.name, self.notes)
+
+    def get_text(self):
+        return self.name
+
 # class that holds specific information about a story
 class Story(Base):
     def __init__(self, questions):
