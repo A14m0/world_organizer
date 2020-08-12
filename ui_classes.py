@@ -32,7 +32,7 @@ class AddChar_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_path = QtGui.QPixmap("images/character-default.jpg")
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -214,7 +214,7 @@ class AddEvent_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_path = QtGui.QPixmap("images/event-default.jpg")
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -331,7 +331,7 @@ class AddLocation_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_path = QtGui.QPixmap("images/location-default.jpg")
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -444,7 +444,7 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("example.jpg")
+        self.image_path = QtGui.QPixmap("images/world-default.jpg")
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
