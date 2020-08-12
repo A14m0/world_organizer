@@ -5,18 +5,24 @@ from elements import *
 # dialog for adding a character
 class AddChar_Diag(QtWidgets.QDialog):
     resized = QtCore.pyqtSignal()
-    def __init__(self, Parent=None):
+    def __init__(self, Parent=None, character=None):
         super().__init__()
         self.parent = Parent
-        self.level = self.parent.level
+        
+        # set parent value if character doesnt exist yet
+        if character is None:
+            self.level = self.parent.level
+            self.char_exists = False
+        else:
+            self.level = 1
+            self.char_exists = True
+        
         self.index = 0
         self.story = self.parent.story
-        self.character = None
+        self.character = character
         self.FirstRun = True
         self.edit_areas = []
 
-        # to set text in edit areas:
-        #   edit_area.document.setText(text)
         
         self.setGeometry(100,100,960,800)
 
@@ -58,21 +64,39 @@ class AddChar_Diag(QtWidgets.QDialog):
 
         current_y = 0
 
-        # add questions and spots to answer them
-        for question in self.story.questions["Questions"]:
-            if question["Priority"] <= self.level:
+        # check if the character exists
+        if self.char_exists:
+            #load the answered questions
+            for attr in self.character.attributes:
                 quest = QtWidgets.QLabel(self)
-                quest.setText(question["QuestionString"])
+                quest.setText(attr.ele1)
                 quest.setGeometry(10, current_y, int(self.width()/2), 80)
                 current_y = current_y + 90
 
                 text_box = QtWidgets.QPlainTextEdit(self)
                 text_box.setGeometry(10, current_y, int(self.width()/2) -40, 180)
+                text_box.document().setPlainText(attr.ele2)
                 self.edit_areas.append(text_box)
                 current_y = current_y + 190
 
                 self.vbox.addWidget(quest)
                 self.vbox.addWidget(text_box)
+        else:
+            # add questions and spots to answer them
+            for question in self.story.questions["Questions"]:
+                if question["Priority"] <= self.level:
+                    quest = QtWidgets.QLabel(self)
+                    quest.setText(question["QuestionString"])
+                    quest.setGeometry(10, current_y, int(self.width()/2), 80)
+                    current_y = current_y + 90
+
+                    text_box = QtWidgets.QPlainTextEdit(self)
+                    text_box.setGeometry(10, current_y, int(self.width()/2) -40, 180)
+                    self.edit_areas.append(text_box)
+                    current_y = current_y + 190
+
+                    self.vbox.addWidget(quest)
+                    self.vbox.addWidget(text_box)
 
 
         # finish up the scroll layout
@@ -107,20 +131,25 @@ class AddChar_Diag(QtWidgets.QDialog):
 
     def save_char(self):
         indx = 0
-        self.character = None
+
         for val in self.edit_areas:
             attr = Attribute()
 
             if indx == 0:
                 self.character = Character(val.toPlainText())
-            else:
-                attr.set_e1(self.story.questions["Questions"][indx]["QuestionString"])
-                attr.set_e2(val.toPlainText())
-                self.character.add_attribute(attr)
+            
+            attr.set_e1(self.story.questions["Questions"][indx]["QuestionString"])
+            attr.set_e2(val.toPlainText())
+            self.character.add_attribute(attr)
 
             indx = indx + 1
 
-        self.story.add_character(self.character)
+
+        if self.char_exists:
+            self.story.update_character(self.character)
+        else:
+            self.story.add_character(self.character)
+        
         self.close()
 
     def load_img(self):
@@ -191,11 +220,17 @@ class ComplexityLvl_Diag(QtWidgets.QDialog):
 
 class AddEvent_Diag(QtWidgets.QDialog):
     resized = QtCore.pyqtSignal()
-    def __init__(self, Parent=None):
+    def __init__(self, Parent=None, event=None):
         super().__init__()
         self.parent = Parent
         self.story = self.parent.story
-        self.event = None
+        self.event = event
+
+        if event is None:
+            self.event_exists = False
+        else:
+            self.event_exists = True
+
         self.questions = ["Short Description (few words)",\
                          "Date the event occurred", "Time the event occurred",\
                          "Location the event happened at", "Description of the event"]
@@ -255,6 +290,14 @@ class AddEvent_Diag(QtWidgets.QDialog):
             self.vbox.addWidget(quest)
             self.vbox.addWidget(text_box)
 
+        # check if the event already exists
+        if self.event_exists:
+            # load previous answers if it does exist
+            self.edit_areas[0].document().setPlainText(self.event.short)
+            self.edit_areas[1].document().setPlainText(self.event.Date)
+            self.edit_areas[2].document().setPlainText(self.event.Time)
+            self.edit_areas[3].document().setPlainText(self.event.Location)
+            self.edit_areas[4].document().setPlainText(self.event.Description)
 
         # finish up the scroll layout
         self.widget.setLayout(self.vbox)
@@ -288,13 +331,15 @@ class AddEvent_Diag(QtWidgets.QDialog):
 
     def save_char(self):
         
-        evt = Event(self.edit_areas[0].toPlainText(), 
+        self.evt = Event(self.edit_areas[0].toPlainText(), 
                     self.edit_areas[1].toPlainText(), 
                     self.edit_areas[2].toPlainText(),
                     self.edit_areas[3].toPlainText(), 
                     self.edit_areas[4].toPlainText())
-        
-        self.story.add_event(evt)
+        if self.event_exists:
+            self.story.update_event(self.evt)
+        else:
+            self.story.add_event(self.evt)
         self.close()
 
     def load_img(self):
@@ -308,11 +353,17 @@ class AddEvent_Diag(QtWidgets.QDialog):
 
 class AddLocation_Diag(QtWidgets.QDialog):
     resized = QtCore.pyqtSignal()
-    def __init__(self, Parent=None):
+    def __init__(self, Parent=None, location=None):
         super().__init__()
         self.parent = Parent
         self.story = self.parent.story
-        self.event = None
+        self.location = location
+
+        if self.location is None:
+            self.location_exists = False
+        else:
+            self.location_exists = True
+
         self.questions = ["Location Name",\
                          "Location Description",\
                          "Other notes"]
@@ -372,7 +423,12 @@ class AddLocation_Diag(QtWidgets.QDialog):
             self.vbox.addWidget(quest)
             self.vbox.addWidget(text_box)
 
-
+        # check if the location exists already
+        if self.location_exists:
+            self.edit_areas[0].document().setPlainText(self.location.name)
+            self.edit_areas[1].document().setPlainText(self.location.description)
+            self.edit_areas[2].document().setPlainText(self.location.notes)
+            
         # finish up the scroll layout
         self.widget.setLayout(self.vbox)
 
@@ -405,11 +461,13 @@ class AddLocation_Diag(QtWidgets.QDialog):
 
     def save_char(self):
         
-        loc = Location(self.edit_areas[0].toPlainText(), 
+        self.location = Location(self.edit_areas[0].toPlainText(), 
                         self.edit_areas[1].toPlainText(), 
                         self.edit_areas[2].toPlainText())
-        
-        self.story.add_location(loc)
+        if self.location_exists:
+            self.story.update_location(self.location)
+        else:
+            self.story.add_location(self.location)
         self.close()
 
     def load_img(self):
@@ -422,11 +480,17 @@ class AddLocation_Diag(QtWidgets.QDialog):
 # dialogue to add a new World Property
 class AddWorldProp_Diag(QtWidgets.QDialog):
     resized = QtCore.pyqtSignal()
-    def __init__(self, Parent=None):
+    def __init__(self, Parent=None, prop=None):
         super().__init__()
         self.parent = Parent
         self.story = self.parent.story
-        self.event = None
+        self.prop = prop
+
+        if self.prop is None:
+            self.world_prop_exists = False
+        else: 
+            self.world_prop_exists = True
+
         self.questions = ["World Property Name",\
                          "Notes about the property"]
         self.edit_areas = []
@@ -485,6 +549,12 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
             self.vbox.addWidget(quest)
             self.vbox.addWidget(text_box)
 
+        # check if the property exists already
+        if self.world_prop_exists:
+            self.edit_areas[0].document().setPlainText(self.prop.name)
+            self.edit_areas[1].document().setPlainText(self.prop.notes)
+            
+
 
         # finish up the scroll layout
         self.widget.setLayout(self.vbox)
@@ -518,10 +588,13 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
 
     def save_char(self):
         
-        prop = World_Prop(self.edit_areas[0].toPlainText(), 
+        self.prop = World_Prop(self.edit_areas[0].toPlainText(), 
                         self.edit_areas[1].toPlainText())
         
-        self.story.add_world_attr(prop)
+        if self.world_prop_exists:
+            self.story.update_world_attr(self.prop)
+        else:
+            self.story.add_world_attr(self.prop)
         self.close()
 
     def load_img(self):

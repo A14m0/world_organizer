@@ -88,8 +88,7 @@ class Story(Base):
         self.events = []
         self.locations = []
         self.world_attributes = []
-        self.notes = []
-
+        
         self.questions = questions
 
     def add_character(self, character):
@@ -104,8 +103,45 @@ class Story(Base):
     def add_world_attr(self, attr):
         self.world_attributes.append(attr)
 
-    def add_note(self, note):
-        self.notes.append(note)
+    def update_character(self, character):
+        indx = 0
+        for char in self.characters:
+            if char.get_text() == character.get_text():
+                self.characters[indx] = character
+                return
+            indx += 1
+        
+        self.add_character(character)
+
+    def update_event(self, event):
+        indx = 0
+        for evt in self.events:
+            if evt.get_text() == event.get_text():
+                self.events[indx] = event
+                return
+            indx += 1
+        
+        self.add_event(event)
+
+    def update_location(self, location):
+        indx = 0
+        for loc in self.locations:
+            if loc.get_text() == location.get_text():
+                self.locations[indx] = location
+                return
+            indx += 1
+        
+        self.add_location(location)
+
+    def update_world_attr(self, attribute):
+        indx = 0
+        for attr in self.world_attributes:
+            if attr.get_text() == attribute.get_text():
+                self.world_attributes[indx] = attribute
+                return
+            indx += 1
+        
+        self.add_world_attr(attribute)
 
     def save(self):
         # initialize the json structure
@@ -208,6 +244,12 @@ class Story(Base):
             self.add_world_attr(tmp_prop)
 
         return None
+
+    def clear(self):
+        self.characters = []
+        self.events = []
+        self.locations = []
+        self.world_attributes = []
         
     def get_title(self):
         return "Test Story"

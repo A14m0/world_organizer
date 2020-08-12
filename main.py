@@ -38,7 +38,7 @@ class MainWin(QtWidgets.QMainWindow):
         # initialize the File menu
         self.menu_file = QtWidgets.QMenu(self)
         self.menu_file.setTitle("File")
-        self.menu_file.addAction("New Story", self.Junk)
+        self.menu_file.addAction("New Story", self.new_story)
         self.menu_file.addAction("Load Story", self.load_story)
         self.menu_file.addSeparator()
         self.menu_file.addAction("Save Story", self.story.save)
@@ -110,10 +110,10 @@ class MainWin(QtWidgets.QMainWindow):
         self.world_prop_tree.setGeometry(550, 230, 300, 180)
 
         # set up signal handlers (data, column)
-        self.char_tree.itemDoubleClicked.connect(self.Junk)
-        self.event_tree.itemDoubleClicked.connect(self.Junk)
-        self.location_tree.itemDoubleClicked.connect(self.Junk)
-        self.world_prop_tree.itemDoubleClicked.connect(self.Junk)
+        self.char_tree.itemDoubleClicked.connect(self.char_double_click)
+        self.event_tree.itemDoubleClicked.connect(self.evt_double_click)
+        self.location_tree.itemDoubleClicked.connect(self.loc_double_click)
+        self.world_prop_tree.itemDoubleClicked.connect(self.prop_double_click)
 
         self.update_stuff()
 
@@ -218,6 +218,39 @@ class MainWin(QtWidgets.QMainWindow):
         path = ui_classes.open_file("Story Files (*.json)")
         self.story.load(path)
         self.reload_trees()
+        return
+
+    def new_story(self):
+        self.story.clear()
+        self.reload_trees()
+        return
+
+    def char_double_click(self, char, col):
+        win = ui_classes.AddChar_Diag(self, char.data(0, QtCore.Qt.UserRole))
+        win.exec()
+        self.reload_trees()
+        return
+
+
+    def evt_double_click(self, evt, col):
+        win = ui_classes.AddEvent_Diag(self, evt.data(0, QtCore.Qt.UserRole))
+        win.exec()
+        self.reload_trees()
+        return
+
+    
+    def loc_double_click(self, loc, col):
+        win = ui_classes.AddLocation_Diag(self, loc.data(0, QtCore.Qt.UserRole))
+        win.exec()
+        self.reload_trees()
+        return
+
+    
+    def prop_double_click(self, prop, col):
+        win = ui_classes.AddWorldProp_Diag(self, prop.data(0, QtCore.Qt.UserRole))
+        win.exec()
+        self.reload_trees()
+        return
 
 
 def main():
