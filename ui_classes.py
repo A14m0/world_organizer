@@ -14,6 +14,9 @@ class AddChar_Diag(QtWidgets.QDialog):
         self.character = None
         self.FirstRun = True
         self.edit_areas = []
+
+        # to set text in edit areas:
+        #   edit_area.document.setText(text)
         
         self.setGeometry(100,100,960,800)
 
