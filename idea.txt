@@ -1,0 +1,1 @@
+Make a gui based around a central tree were you just see each individual location, and as children there are events

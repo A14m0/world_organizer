@@ -89,6 +89,7 @@ class Story(Base):
         self.events = []
         self.locations = []
         self.world_attributes = []
+        self.most_recent = None
         self.notes = ""
         
         self.path = None
@@ -97,21 +98,26 @@ class Story(Base):
 
     def add_character(self, character):
         self.characters.append(character)
+        self.most_recent = character
 
     def add_event(self, event):
         self.events.append(event)
+        self.most_recent = event
 
     def add_location(self, loc):
         self.locations.append(loc)
+        self.most_recent = loc
 
     def add_world_attr(self, attr):
         self.world_attributes.append(attr)
+        self.most_recent = attr
 
     def update_character(self, character):
         indx = 0
         for char in self.characters:
             if char.get_text() == character.get_text():
                 self.characters[indx] = character
+                self.most_recent = character
                 return
             indx += 1
         
@@ -122,6 +128,7 @@ class Story(Base):
         for evt in self.events:
             if evt.get_text() == event.get_text():
                 self.events[indx] = event
+                self.most_recent = event
                 return
             indx += 1
         
@@ -132,6 +139,7 @@ class Story(Base):
         for loc in self.locations:
             if loc.get_text() == location.get_text():
                 self.locations[indx] = location
+                self.most_recent = location
                 return
             indx += 1
         
@@ -142,6 +150,7 @@ class Story(Base):
         for attr in self.world_attributes:
             if attr.get_text() == attribute.get_text():
                 self.world_attributes[indx] = attribute
+                self.most_recent = attribute
                 return
             indx += 1
         
@@ -225,6 +234,7 @@ class Story(Base):
         self.locations.clear()
         self.world_attributes.clear()
         self.notes = ""
+        self.most_recent = None
 
         # load the title
         self.title = dat["Title"]
@@ -267,6 +277,8 @@ class Story(Base):
         self.events = []
         self.locations = []
         self.world_attributes = []
+        self.notes = []
+        self.most_recent = None
 
         self.title = "None"
         

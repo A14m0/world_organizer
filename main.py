@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 import sys
 
 import ui_classes
-from elements import Story
+from elements import *
 
 low_complexity = 1
 med_complexity = 2
@@ -132,9 +132,9 @@ class MainWin(QtWidgets.QMainWindow):
             x = 550
 
         # resize text labels
-        self.story_str_label.setGeometry(60, y-70, 150, 25)
-        self.char_num_label.setGeometry(60, y-50, 150, 25)
-        self.event_num_label.setGeometry(60, y-30, 150, 25)
+        self.story_str_label.setGeometry(60, y-70, self.width(), 25)
+        self.char_num_label.setGeometry(60, y-50, self.width(), 25)
+        self.event_num_label.setGeometry(60, y-30, self.width(), 25)
 
         # resize views
         self.char_tree.setGeometry(230, 30, int((1/2) * (x-300)), int((1/2) * (y-180)) )
@@ -257,12 +257,168 @@ class MainWin(QtWidgets.QMainWindow):
         return
 
 
+class TreeView_Window(QtWidgets.QMainWindow):
+    resized = QtCore.pyqtSignal()
+    def __init__(self, story):
+        super().__init__()
+        self.setWindowTitle("Test Window 2")
+        self.setGeometry(100, 100, 800, 550)
+        self.story = story
+        self.entries = []
+        self.UiComponents()
+        self.show()
+        self.resized.connect(self.update)
+        self.update()
+
+    def UiComponents(self):
+        # set up the main view of the central widget
+        self.main_view = QtWidgets.QTreeWidget(self)
+        self.main_view.setColumnCount(2)
+        self.main_view.setGeometry(40, 40, self.width()-80, self.height()-80)
+        self.main_view.doubleClicked.connect(self.handle_open)
+
+        # initialize the File menu
+        self.menu_file = QtWidgets.QMenu(self)
+        self.menu_file.setTitle("File")
+        self.menu_file.addAction("New Story", self.new_story)
+        self.menu_file.addAction("Load Story", self.load_story)
+        self.menu_file.addSeparator()
+        self.menu_file.addAction("Save Story", self.story.save)
+
+        # initialize the Tools menu
+        self.menu_tools = QtWidgets.QMenu(self)
+        self.menu_tools.setTitle("Tools")
+        self.menu_tools.addAction("View Timeline", self.Junk)
+        self.menu_tools.addAction("View Relations", self.Junk)
+        self.menu_tools.addAction("View Story Notes", self.Junk)
+        self.menu_tools.addAction("Edit Story Notes", self.Junk)
+
+        #initialize the toolbar
+        self.toolbar = QtWidgets.QMenuBar(self)
+        self.toolbar.addMenu(self.menu_file)
+        self.toolbar.addMenu(self.menu_tools)
+
+    # junk file
+    def Junk(self):
+        print("Button was pressed")
+        
+    def load_story(self):
+        path = ui_classes.open_file("Story Files (*.json)")
+        if path != "":
+            self.story.load(path)
+            self.reload()
+        return
+
+    def new_story(self):
+        
+        win = ui_classes.NewStory_Diag(self)
+        win.exec()
+
+        self.reload()
+        return
+
+
+    # triggers resize events 
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(TreeView_Window, self).resizeEvent(event)
+
+    def update(self):
+        self.main_view.setGeometry(40, 40, self.width() -80 , self.height()-80)
+        return
+
+    def contextMenuEvent(self, event):
+        cmenu = QtWidgets.QMenu(self)
+
+        new_loc = cmenu.addAction("New Location")
+        new_char = cmenu.addAction("New Character")
+        new_event = cmenu.addAction("New Event")
+        new_world_prop = cmenu.addAction("New World Property")
+
+        quitAct = cmenu.addAction("Quit")
+        action = cmenu.exec_(self.mapToGlobal(event.pos()))
+
+        data = None
+        add_type = ""
+
+        win = None
+
+        if action == quitAct:
+            self.close()
+        elif action == new_char:
+            add_type = "Character"
+            win = ui_classes.ComplexityLvl_Diag(self)
+        elif action == new_event:
+            add_type = "Event"
+            win = ui_classes.AddEvent_Diag(self)
+        elif action == new_loc:
+            add_type = "Location"
+            win = ui_classes.AddLocation_Diag(self)
+        elif action == new_world_prop:
+            add_type = "World Property"
+            win = ui_classes.AddWorldProp_Diag(self)
+        else:
+            print("No Known Action")
+            return
+
+        win.exec()
+
+        data = self.story.most_recent
+
+        selected = self.main_view.selectedItems()
+        if len(selected) > 1:
+            print("Too many selected")
+            return
+        elif len(selected) == 0:
+            item = QtWidgets.QTreeWidgetItem(self.main_view)
+            self.entries.append(item)
+            item.setText(0, add_type)
+            item.setText(1,data.get_text())
+            item.setData(1, QtCore.Qt.UserRole, QtCore.QVariant(data))
+            self.main_view.addTopLevelItem(item)
+        else:
+            item = QtWidgets.QTreeWidgetItem(selected[0])
+            self.entries.append(item)
+            item.setText(0, add_type)
+            item.setText(1, data.get_text())
+            item.setData(1, QtCore.Qt.UserRole, QtCore.QVariant(data))
+            selected[0].addChild(item)
+
+
+
+    def handle_open(self, char):
+        dat = char.data(QtCore.Qt.UserRole)
+        win = None
+        if isinstance(dat, Character):
+            print("Class Character Detected")
+            win = ui_classes.AddChar_Diag(self, dat)
+        elif isinstance(dat, Event):
+            print("Class Event Detected")
+            win = ui_classes.AddEvent_Diag(self, dat)
+        elif isinstance(dat, Location):
+            print("Class Location Detected")
+            win = ui_classes.AddLocation_Diag(self, dat)
+        elif isinstance(dat, World_Prop):
+            print("Class World_Property Detected")
+            win = ui_classes.AddWorldProp_Diag(self, dat)
+        else:
+            print("Illegal class %s" % type(dat))
+        
+        
+        win.exec()
+        self.reload()
+        return
+
+    def reload(self):
+        for entry in self.entries:
+            entry.setText(1, entry.data(1, QtCore.Qt.UserRole).get_text())
+
 def main():
     App = QtWidgets.QApplication(sys.argv) 
     story = Story("Default", questions)
     
     # create the instance of our Window 
-    window = MainWin(story) 
+    window = TreeView_Window(story) 
 
     # start the app 
     sys.exit(App.exec())
