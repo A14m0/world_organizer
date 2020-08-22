@@ -418,7 +418,10 @@ def main():
     story = Story("Default", questions)
     
     # create the instance of our Window 
-    window = TreeView_Window(story) 
+    if len(sys.argv) > 1:
+        window = TreeView_Window(story)
+    else:
+        window = MainWin(story) 
 
     # start the app 
     sys.exit(App.exec())

@@ -5,12 +5,15 @@ import ui_classes
 class Base:
     def get_text(self):
         pass
+    def set_image(self, image):
+        pass
 
 
 # class for defining characters and their attributes
 class Character(Base):
-    def __init__(self, name):
+    def __init__(self, name, image="images/character-default.jpg"):
         self.name = name
+        self.image = image
         self.attributes = []
     
     def add_attribute(self, attribute):
@@ -25,6 +28,12 @@ class Character(Base):
 
     def get_text(self):
         return self.name
+
+    def set_image(self, image):
+        self.image = image
+
+    def set_name(self, name):
+        self.name = name
 
 # class that defines a question element or answer to a question
 class Attribute(Base):
@@ -44,23 +53,30 @@ class Attribute(Base):
 
 # class that defines a particular world event
 class Event(Base):
-    def __init__(self, short, date, time, location, description):
+    def __init__(self, short, date, time, location, description, image="images/event-default.jpg"):
         self.short = short
         self.Date = date
         self.Time = time
         self.Location = location
         self.Description = description
 
+        self.image = image
+
     def get_text(self):
         return self.short
+
+    def set_image(self, image):
+        self.image = image
 
 
 # class that defines a world location
 class Location(Base):
-    def __init__(self, name, description, notes):
+    def __init__(self, name, description, notes, image="images/location-default.jpg"):
         self.name = name
         self.description = description
         self.notes = notes
+
+        self.image = image
 
     def __str__(self):
         return "Name: %s\nDescription: %s\nNotes: %s\n" % \
@@ -69,11 +85,15 @@ class Location(Base):
     def get_text(self):
         return self.name
 
+    def set_image(self, image):
+        self.image = image
+
 
 # class that defines a world property
 class World_Prop(Base):
-    def __init__(self, name, notes):
+    def __init__(self, name, notes, image="images/world-default.jpg"):
         self.name = name
+        self.image = image
         self.notes = notes
 
     def __str__(self):
@@ -81,6 +101,9 @@ class World_Prop(Base):
 
     def get_text(self):
         return self.name
+
+    def set_image(self, image):
+        self.image = image
 
 # class that holds specific information about a story
 class Story(Base):
@@ -170,6 +193,7 @@ class Story(Base):
         for character in self.characters:
             tmp_dat = {}
             tmp_dat["Name"] = character.get_text()
+            tmp_dat["Image"] = character.image
             tmp_dat["Attributes"] = []
 
             # read all of the target character's attributes
@@ -185,6 +209,7 @@ class Story(Base):
         for event in self.events:
             tmp_dat = {}
             tmp_dat["Short"] = event.get_text()
+            tmp_dat["Image"] = event.image
             tmp_dat["Date"] = event.Date
             tmp_dat["Time"] = event.Time
             tmp_dat["Location"] = event.Location
@@ -197,6 +222,7 @@ class Story(Base):
         for location in self.locations:
             tmp_dat = {}
             tmp_dat["Name"] = location.get_text()
+            tmp_dat["Image"] = location.image
             tmp_dat["Description"] = location.description
             tmp_dat["Notes"] = location.notes
 
@@ -207,6 +233,7 @@ class Story(Base):
         for prop in self.world_attributes:
             tmp_dat = {}
             tmp_dat["Name"] = prop.get_text()
+            tmp_dat["Image"] = prop.image
             tmp_dat["Notes"] = prop.notes
 
             # append location to the data
@@ -242,7 +269,7 @@ class Story(Base):
 
         # load all of the characters stored in the story
         for character in dat["Characters"]:
-            char = Character(character["Name"])
+            char = Character(character["Name"], character["Image"])
             for attr in character["Attributes"]:
                 tmp_attr = Attribute()
                 tmp_attr.set_e1(attr["Element1"])
@@ -254,20 +281,21 @@ class Story(Base):
         for event in dat["Events"]:
             tmp_evt = Event(event["Short"], event["Date"], 
                             event["Time"], event["Location"], 
-                            event["Description"])
+                            event["Description"], event["Image"])
             self.add_event(tmp_evt)
 
         # load all locations
         for location in dat["Locations"]:
             tmp_loc = Location(location["Name"], 
-                            location["Description"], 
-                            location["Notes"])
+                               location["Description"], 
+                               location["Notes"])
             self.add_location(tmp_loc)
 
         # load all world attributes
         for propert in dat["World_Properties"]:
             tmp_prop = World_Prop(propert["Name"], 
-                            propert["Notes"])
+                                  propert["Notes"], 
+                                  propert["Image"])
             self.add_world_attr(tmp_prop)
 
         return None

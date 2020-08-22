@@ -13,13 +13,15 @@ class AddChar_Diag(QtWidgets.QDialog):
         if character is None:
             self.level = self.parent.level
             self.char_exists = False
+            self.character = Character("TMP")
         else:
             self.level = 1
             self.char_exists = True
+            self.character = character
         
         self.index = 0
         self.story = self.parent.story
-        self.character = character
+        #self.character = character
         self.FirstRun = True
         self.edit_areas = []
 
@@ -38,7 +40,9 @@ class AddChar_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("images/character-default.jpg")
+
+        self.image_path = QtGui.QPixmap(self.character.image)
+        
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -136,8 +140,8 @@ class AddChar_Diag(QtWidgets.QDialog):
             attr = Attribute()
 
             if indx == 0:
-                self.character = Character(val.toPlainText())
-            
+                self.character.set_name(val.toPlainText())
+
             attr.set_e1(self.story.questions["Questions"][indx]["QuestionString"])
             attr.set_e2(val.toPlainText())
             self.character.add_attribute(attr)
@@ -155,6 +159,7 @@ class AddChar_Diag(QtWidgets.QDialog):
     def load_img(self):
         img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
+            self.character.set_image(img_name)
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
 
@@ -228,8 +233,10 @@ class AddEvent_Diag(QtWidgets.QDialog):
 
         if event is None:
             self.event_exists = False
+            self.event = Event("", "", "", "", "")
         else:
             self.event_exists = True
+            self.event = event
 
         self.questions = ["Short Description (few words)",\
                          "Date the event occurred", "Time the event occurred",\
@@ -249,7 +256,10 @@ class AddEvent_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("images/event-default.jpg")
+
+        self.image_path = QtGui.QPixmap(self.event.image)
+
+
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -335,7 +345,8 @@ class AddEvent_Diag(QtWidgets.QDialog):
                     self.edit_areas[1].toPlainText(), 
                     self.edit_areas[2].toPlainText(),
                     self.edit_areas[3].toPlainText(), 
-                    self.edit_areas[4].toPlainText())
+                    self.edit_areas[4].toPlainText(),
+                    self.event.image)
         if self.event_exists:
             self.story.update_event(self.evt)
         else:
@@ -345,6 +356,7 @@ class AddEvent_Diag(QtWidgets.QDialog):
     def load_img(self):
         img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
+            self.event.set_image(img_name)
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
 
@@ -361,8 +373,10 @@ class AddLocation_Diag(QtWidgets.QDialog):
 
         if self.location is None:
             self.location_exists = False
+            self.location = Location("", "", "")
         else:
             self.location_exists = True
+            self.location = location
 
         self.questions = ["Location Name",\
                          "Location Description",\
@@ -382,7 +396,7 @@ class AddLocation_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("images/location-default.jpg")
+        self.image_path = QtGui.QPixmap(self.location.image)
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -463,7 +477,8 @@ class AddLocation_Diag(QtWidgets.QDialog):
         
         self.location = Location(self.edit_areas[0].toPlainText(), 
                         self.edit_areas[1].toPlainText(), 
-                        self.edit_areas[2].toPlainText())
+                        self.edit_areas[2].toPlainText(),
+                        self.location.image)
         if self.location_exists:
             self.story.update_location(self.location)
         else:
@@ -473,6 +488,7 @@ class AddLocation_Diag(QtWidgets.QDialog):
     def load_img(self):
         img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
+            self.location.set_image(img_name)
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
 
@@ -488,8 +504,10 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
 
         if self.prop is None:
             self.world_prop_exists = False
+            self.prop = World_Prop("", "")
         else: 
             self.world_prop_exists = True
+            self.prop = prop
 
         self.questions = ["World Property Name",\
                          "Notes about the property"]
@@ -508,7 +526,12 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
         self.save = QtWidgets.QPushButton(self)
         self.cancel = QtWidgets.QPushButton(self)
         self.image = QtWidgets.QLabel(self)
-        self.image_path = QtGui.QPixmap("images/world-default.jpg")
+
+        if self.prop:
+            self.image_path = QtGui.QPixmap(self.prop.image)
+        else:
+            self.image_path = QtGui.QPixmap("images/world-default.jpg")
+        
         self.image_button = QtWidgets.QPushButton(self)
 
         self.save.setText("Save")
@@ -589,7 +612,8 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
     def save_char(self):
         
         self.prop = World_Prop(self.edit_areas[0].toPlainText(), 
-                        self.edit_areas[1].toPlainText())
+                               self.edit_areas[1].toPlainText(),
+                               self.prop.image)
         
         if self.world_prop_exists:
             self.story.update_world_attr(self.prop)
@@ -600,6 +624,7 @@ class AddWorldProp_Diag(QtWidgets.QDialog):
     def load_img(self):
         img_name = open_file("Image Files (*.jpg *.png)")
         if img_name != "":
+            self.prop.set_image(img_name)
             self.image_path = QtGui.QPixmap(img_name)
             self.update()
 
