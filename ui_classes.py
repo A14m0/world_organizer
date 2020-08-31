@@ -1,3 +1,4 @@
+import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 from elements import Character, Attribute, Event, Location, World_Prop, Story 
 
@@ -136,18 +137,41 @@ class AddChar_Diag(QtWidgets.QDialog):
     def save_char(self):
         indx = 0
 
+        char_attrs = self.character.attributes
         self.character.clear()
-        for val in self.edit_areas:
-            attr = Attribute()
+        
+        if char_attrs != []:
+            for val in self.edit_areas:
+                attr = Attribute()
 
-            if indx == 0:
-                self.character.set_name(val.toPlainText())
+                if indx == 0:
+                    self.character.set_name(val.toPlainText())
 
-            attr.set_e1(self.story.questions["Questions"][indx]["QuestionString"])
-            attr.set_e2(val.toPlainText())
-            self.character.add_attribute(attr)
+                try:
+                    attr.set_e1(char_attrs[indx].ele1)
+                except IndexError:
+                    print("Failed to find question at index %d in list of size %d! (%d edit areas)" % (indx, len(self.story.questions["Questions"]), len(self.edit_areas)))
+                    sys.exit(1)
+                attr.set_e2(val.toPlainText())
+                self.character.add_attribute(attr)
 
-            indx = indx + 1
+                indx = indx + 1
+        else:
+            for val in self.edit_areas:
+                attr = Attribute()
+
+                if indx == 0:
+                    self.character.set_name(val.toPlainText())
+
+                try:
+                    attr.set_e1(self.story.questions["Questions"][indx]["QuestionString"])
+                except IndexError:
+                    print("Failed to find question at index %d in list of size %d! (%d edit areas)" % (indx, len(self.story.questions["Questions"]), len(self.edit_areas)))
+                    sys.exit(1)
+                attr.set_e2(val.toPlainText())
+                self.character.add_attribute(attr)
+
+                indx = indx + 1
 
 
         if self.char_exists:
