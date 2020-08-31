@@ -136,6 +136,7 @@ class AddChar_Diag(QtWidgets.QDialog):
     def save_char(self):
         indx = 0
 
+        self.character.clear()
         for val in self.edit_areas:
             attr = Attribute()
 

@@ -7,7 +7,8 @@ class Base:
         pass
     def set_image(self, image):
         pass
-
+    def clear(self):
+        pass
 
 # class for defining characters and their attributes
 class Character(Base):
@@ -34,6 +35,9 @@ class Character(Base):
 
     def set_name(self, name):
         self.name = name
+
+    def clear(self):
+        self.attributes = []
 
 # class that defines a question element or answer to a question
 class Attribute(Base):
